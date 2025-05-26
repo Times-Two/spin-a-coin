@@ -1,0 +1,260 @@
+ * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: #333;
+    min-height: 100vh;
+    /* display: flex; */
+    justify-content: center;
+    align-items: flex-start;
+    padding: 30px 30px;
+  }
+
+  .container {
+    background: #fff;
+    border-radius: 15px;
+    width: 360px;
+    max-width: 100%;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    padding: 25px 30px 40px;
+    text-align: center;
+    margin-left: 500px;
+  }
+
+  h1 {
+    margin: 0 0 15px;
+    font-weight: 900;
+    color: #4b47a3;
+    font-size: 2.4rem;
+  }
+
+  .wheel-container {
+    position: relative;
+    margin: 30px auto 30px;
+    width: 280px;
+    height: 280px;
+  }
+
+  canvas#wheel {
+    border-radius: 50%;
+    box-shadow: 0 8px 20px rgba(75, 71, 163, 0.4);
+    width: 280px;
+    height: 280px;
+    transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+
+  .pointer {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-bottom: 40px solid #ff3e00;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+    z-index: 10;
+  }
+
+  .coins {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: #4b47a3;
+  }
+
+  button {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 40px;
+    box-shadow: 0 5px 15px rgba(75, 71, 163, 0.4);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin: 10px 5px;
+  }
+
+  button.spin-btn {
+    background: #ff3e00;
+    color: white;
+  }
+  button.spin-btn:hover:not(:disabled) {
+    background: #e53800;
+    box-shadow: 0 8px 25px rgba(229, 56, 0, 0.6);
+  }
+  button.spin-btn:disabled {
+    background: #ffa18c;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  button.ad-btn {
+    background: #4661e6;
+    color: white;
+  }
+  button.ad-btn:hover {
+    background: #324ab3;
+    box-shadow: 0 8px 25px rgba(50, 74, 179, 0.6);
+  }
+
+  button.purchase-btn {
+    background: #2ebf91;
+    color: white;
+  }
+  button.purchase-btn:hover {
+    background: #239978;
+    box-shadow: 0 8px 25px rgba(35, 153, 120, 0.6);
+  }
+
+  button.redeem-btn {
+    background: #ffb400;
+    color: #333;
+  }
+  button.redeem-btn:hover {
+    background: #d99c00;
+    box-shadow: 0 8px 25px rgba(217, 156, 0, 0.6);
+  }
+
+  input#phoneInput {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 15px 0 20px;
+    border: 2px solid #ddd;
+    border-radius: 40px;
+    font-size: 1.1rem;
+    text-align: center;
+    transition: border-color 0.3s ease;
+  }
+  input#phoneInput:focus {
+    border-color: #4b47a3;
+    outline: none;
+  }
+
+  .message {
+    font-size: 1rem;
+    min-height: 26px;
+    color: #4b47a3;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+  .message.error {
+    color: #e53935;
+  }
+  .message.success {
+    color: #2e7d32;
+  }
+
+  /* Debug mode styles - remove in production */
+  .debug-info {
+    background: #f0f0f0;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-family: monospace;
+  }
+  footer {
+    background-color: #222;
+    color: #eee;
+    padding: 30px 20px 15px;
+    margin-top: auto;
+    font-size: 0.9rem;
+  }
+  
+  footer .x {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto 20px;
+    gap: 30px;
+  }
+  
+  footer .x > div {
+    flex: 1 1 160px;
+    min-width: 160px;
+  }
+  
+  footer .x p {
+    margin-bottom: 10px;
+  }
+  
+  footer .x p strong {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    color: #1abc9c;
+  }
+  
+  footer .x a {
+    color: #1abc9c;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  footer .x a:hover {
+    color: #16a085;
+  }
+  
+  footer .vi {
+    text-align: center;
+    border-top: 1px solid #444;
+    padding-top: 12px;
+    font-size: 0.85rem;
+    color: #aaa;
+  }
+  @media screen and (max-width:600px){
+
+    body {
+        padding: 10px 10px;
+      }
+
+    .container {
+        margin-left: 0%;
+      }
+    .wheel-container {
+    position: relative;
+    margin: 30px auto 30px;
+    width: 250px;
+    height: 250px;
+  }
+
+  canvas#wheel {
+    border-radius: 50%;
+    box-shadow: 0 8px 20px rgba(75, 71, 163, 0.4);
+    width: 250px;
+    height: 250px;
+    transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+  h1 {
+    margin: 0 0 15px;
+    font-weight: 800;
+    color: #4b47a3;
+    font-size: 1.4rem;
+  }
+  .pointer {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 50px solid #ff3e00;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+    z-index: 5;
+  }
+  footer .x {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  footer .x > div {
+    min-width: auto;
+  }
+  }

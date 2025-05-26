@@ -1,0 +1,39 @@
+<!-- forgot.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Password - Spin & Win</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <div class="auth-container">
+    <h2>Reset Your Password</h2>
+    <form onsubmit="resetPassword(event)">
+      <input type="email" id="resetEmail" placeholder="Enter your email" required>
+      <button type="submit">Send Reset Link</button>
+      <p><a href="login.html">Back to login</a></p>
+    </form>
+  </div>
+  <script>
+    function resetPassword(event) {
+      event.preventDefault();
+      const email = document.getElementById('resetEmail').value;
+      const user = JSON.parse(localStorage.getItem(email));
+
+      if (user) {
+        const newPassword = prompt("Enter new password:");
+        if (newPassword) {
+          user.password = newPassword;
+          localStorage.setItem(email, JSON.stringify(user));
+          alert("Password reset successful!");
+          window.location.href = "login.html";
+        }
+      } else {
+        alert("No account found with this email");
+      }
+    }
+  </script>
+</body>
+</html>

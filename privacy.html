@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Spin & Win</title>
+  <link rel="stylesheet" href="privacy.css">
+</head>
+<body>
+
+  <h1>Privacy Policy</h1>
+  <p>At Spin & Earn, your privacy is important to us. This policy outlines how we collect, use, and protect your information.</p>
+
+  <h3>Information We Collect:</h3>
+  <ul>
+    <li>Basic data such as device type or usage behavior for improving user experience.</li>
+    <li>Email or phone number (if required for reward redemption).</li>
+  </ul>
+
+  <h3>How We Use Your Data:</h3>
+  <ul>
+    <li>To track spins and manage your earned coins.</li>
+    <li>To contact you about rewards or updates.</li>
+    <li>To improve the performance and features of the platform.</li>
+  </ul>
+
+  <h3>Third-Party Services:</h3>
+  <p>We may use third-party services (e.g., AdSense, analytics) that may collect non-personal data via cookies or similar tools.</p>
+
+  <h3>Your Consent:</h3>
+  <p>By using Spin & Earn, you agree to this privacy policy.</p>
+
+  <h3>Contact Us:</h3>
+  <p>If you have questions about this policy, contact us at: <a href="mailto:twotimes678@gmail.com">twotimes678@gmail.com</a></p>
+
+  <!-- Consent Agreement Section -->
+  <div style="margin-top: 30px;">
+    <input type="checkbox" id="agreeCheckbox" onchange="toggleContinueButton()" />
+    <label for="agreeCheckbox">I have read and agree to the Privacy Policy.</label><br><br>
+    <button id="continueBtn" onclick="window.location.href='signup.html'" disabled>Continue</button>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="x">
+      <div class="I">
+        <p><strong>SPIN <br></strong>& WIN</p>
+      </div>
+
+      <div class="ii">
+        <p><strong>company</strong></p><br>
+        <p><a href="blog.html">Blog</a></p>
+        <p><a href="privacy.html">Privacy and Policy</a></p>
+        <p>FAQ'S</p><br>
+        <p><a href="contact.html">Contact Us</a></p>
+      </div>
+
+      <div class="iii">
+         <p><strong>Contact Us</strong></p><br> 
+         <p>twotimes678@gmail.com</p><br>
+         <p>Takoradi, Axim "GHANA"</p><br>
+         <p><a href="https://wa.me/+233530728551?text">Call or WhatsApp</a></p>
+      </div>
+
+      <div class="iv">
+        <p><strong>Quick Link</strong></p><br>
+        <p><a href="indexx.html">Home</a></p><br>
+        <p><a href="about.html">About Us</a></p><br>
+        <p><a href="contact.html">Contact Us</a></p><br>
+      </div>
+
+      <div class="vv">
+        <p><strong>Social Share</strong></p><br>
+        <p><a href="https://wa.me/+233530728551?text">WhatsApp</a></p><br>
+        <p>Facebook</p><br>
+        <p>Instagram</p><br>
+        <p>LinkedIn</p>
+      </div>
+    </div>
+
+    <div class="vi"><p>Copyright &copy; 2024 | Powered by <strong>TIMES TWO</strong></p></div>
+  </footer>
+
+  <script>
+    function toggleContinueButton() {
+      const checkbox = document.getElementById("agreeCheckbox");
+      const button = document.getElementById("continueBtn");
+      button.disabled = !checkbox.checked;
+    }
+  </script>
+
+</body>
+</html>

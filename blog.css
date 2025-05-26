@@ -1,0 +1,190 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    background: #f9f9f9;
+    color: #333;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .referral-box {
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 25px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  .referral-box h3 {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 1.5rem;
+  }
+  
+  .referral-box p {
+    color: #555;
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+  
+  .referral-box input[type="text"] {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    text-align: center;
+    background-color: #fff;
+  }
+  
+  .referral-box button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .referral-box button:hover {
+    background-color: #0056b3;
+  }
+/* Share Links Container */
+#whatsappShare, #facebookShare {
+  display: inline-block;
+  margin: 8px 10px;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: white;
+  border-radius: 6px;
+  font-size: 16px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background-color 0.3s ease;
+}
+
+/* WhatsApp Button Style */
+#whatsappShare {
+  background-color: #25D366;
+}
+
+#whatsappShare:hover {
+  background-color: #1ebe5b;
+}
+
+/* Facebook Button Style */
+#facebookShare {
+  background-color: #1877F2;
+}
+
+#facebookShare:hover {
+  background-color: #0f66e0;
+}
+  
+  main {
+    padding: 20px;
+  }
+  
+  .blog-post {
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .blog-post h2 {
+    margin-top: 0;
+    color: #0077cc;
+  }
+  
+  .blog-post p {
+    margin-bottom: 0;
+    color: #555;
+  }
+  footer {
+    background-color: #222;
+    color: #eee;
+    padding: 30px 20px 15px;
+    margin-top: auto;
+    font-size: 0.9rem;
+  }
+  
+  footer .x {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto 20px;
+    gap: 30px;
+  }
+  
+  footer .x > div {
+    flex: 1 1 160px;
+    min-width: 160px;
+  }
+  
+  footer .x p {
+    margin-bottom: 10px;
+  }
+  
+  footer .x p strong {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    color: #1abc9c;
+  }
+  
+  footer .x a {
+    color: #1abc9c;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  footer .x a:hover {
+    color: #16a085;
+  }
+  
+  footer .vi {
+    text-align: center;
+    border-top: 1px solid #444;
+    padding-top: 12px;
+    font-size: 0.85rem;
+    color: #aaa;
+  }
+  @media (max-width: 768px) {
+    body {
+      padding: 15px 10px;
+    }
+    
+    footer .x {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+    
+      footer .x > div {
+        min-width: auto;
+      }
+    
+    h1 {
+      font-size: 1.8rem;
+    }
+    
+    p, ul li {
+      font-size: 0.95rem;
+    }
+  }
+    

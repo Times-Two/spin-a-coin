@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Referral Program Explained</title>
+  <link rel="stylesheet" href="blog.css">
+</head>
+<body>
+  <header>
+    <h1>Invite Friends & Earn: Referral Program Explained</h1>
+  </header>
+  <main>
+    <p>Get rewarded for every friend you bring to Spin & Win:</p>
+    <ul>
+      <li>Share your unique referral link found in your profile.</li>
+      <li>Your friend signs up and starts spinning.</li>
+      <li>You earn bonus coins automatically!</li>
+    </ul>
+    <p>There’s no limit—invite more, earn more!</p>
+  </main>
+
+  <div class="referral-box">
+  <h3>Invite Friends & Earn Coins</h3>
+  <p>Share this link with your friends. When they create an account, you earn 50 coins!</p>
+  <input type="text" id="refLink" readonly>
+  <button onclick="copyReferralLink()">Copy Link</button>
+</div>
+<script>
+  const currentUserEmail = localStorage.getItem("loggedInUser");
+  if (currentUserEmail) {
+    const encodedEmail = encodeURIComponent(currentUserEmail);
+    const referralLink = `${window.location.origin}/create.html?ref=${encodedEmail}`;
+    document.getElementById("refLink").value = referralLink;
+  }
+
+  function copyReferralLink() {
+    const linkInput = document.getElementById("refLink");
+    linkInput.select();
+    linkInput.setSelectionRange(0, 99999); // For mobile
+    document.execCommand("copy");
+    alert("Referral link copied to clipboard!");
+  }
+
+</script>
+<div style="margin-top: 10px;">
+  <a id="whatsappShare" target="_blank">Share on WhatsApp</a><br>
+  <a id="facebookShare" target="_blank">Share on Facebook</a>
+</div>
+
+<script>
+  const shareText = `Join me on Spin & Win and earn coins! Use this link to sign up: ${document.getElementById("refLink").value}`;
+  document.getElementById("whatsappShare").href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+  document.getElementById("facebookShare").href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(document.getElementById("refLink").value)}`;
+</script>
+
+
+  <footer>
+    <div class="x">
+      <div class="I">
+        <p><strong>SPIN <br></strong>& WIN</p>
+      </div>
+
+      <div class="ii">
+        <p><strong>company</strong></p><br>
+        <p><a href="blog.html">Blog</a></p>
+        <p><a href="privacy.html">Privacy and Policy</a></p>
+        <p>FAQ'S</p><br>
+        <p><a href="contact.html">Contact Us</a></p>
+      </div>
+
+      <div class="iii">
+         <p><strong>Contact Us</strong></p><br> 
+         <p>twotimes678@gmail.com</p><br>
+         <p>Takoradi, Axim "GHANA"</p><br>
+         <p><a href="https://wa.me/+233530728551?text">Call or WhatsApp</a></p>
+      </div>
+
+      <div class="iv">
+        <p><strong>Quick Link</strong></p><br>
+        <p><a href="indexx.html">Home</a></p><br>
+        <p><a href="about.html">About Us</a></p><br>
+        <p><a href="contact.html">Contact Us</a></p><br>
+      </div>
+
+      <div class="vv">
+        <p><strong>Social Share</strong></p><br>
+        <p><a href="https://wa.me/+233530728551?text">WhatsApp</a></p><br>
+        <p>Facebook</p><br>
+        <p>Instagram</p><br>
+        <p>LinkedIn</p>
+      </div>
+    </div>
+
+    <div class="vi"><p>Copyright &copy; 2024 | Powered by <strong>TIMES TWO</strong></p></div>
+  </footer>
+</body>
+</html>

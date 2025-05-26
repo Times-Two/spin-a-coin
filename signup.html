@@ -1,0 +1,60 @@
+<!-- signup.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account - Spin & Win</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <div class="auth-container">
+    <h2>Create a New Account</h2>
+    <form onsubmit="createAccount(event)">
+      <input type="text" id="signupName" placeholder="Full Name" required>
+      <input type="email" id="signupEmail" placeholder="Email" required>
+      <input type="password" id="signupPassword" placeholder="Password" required>
+      <button type="submit">Sign Up</button>
+      <p>Already have an account? <a href="login.html">Login here</a></p>
+    </form>
+  </div>
+  <script>
+  // Get referrer from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const referrerEmail = urlParams.get('ref');
+
+  function createAccount(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+
+    if (localStorage.getItem(email)) {
+      alert("Account already exists");
+      return;
+    }
+
+    const user = {
+      name,
+      email,
+      password,
+      coins: 0, // Initial coins
+      referrer: referrerEmail || null
+    };
+
+    localStorage.setItem(email, JSON.stringify(user));
+
+    // Reward referrer with 50 coins
+    if (referrerEmail && localStorage.getItem(referrerEmail)) {
+      const refUser = JSON.parse(localStorage.getItem(referrerEmail));
+      refUser.coins = (refUser.coins || 0) + 50;
+      localStorage.setItem(referrerEmail, JSON.stringify(refUser));
+    }
+
+    alert("Account created successfully!");
+    window.location.href = "login.html";
+  }
+  </script>
+</body>
+</html>

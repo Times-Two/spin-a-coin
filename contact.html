@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spin & Win</title>
+    <link rel="stylesheet" href="Content Us.css">
+</head>
+<body>
+    <!-- <a href="profile.html"><div class="profile" id="profile"></div> </a> -->
+
+
+
+    <form id="contactForm" action="https://formspree.io/f/xnnpaqan" method="POST" onsubmit="return validateForm(event)">
+      <input type="text" id="name" name="name" placeholder="Name*" required><br>
+      <input type="email" id="email" name="email" placeholder="Email*" required><br>
+      <input type="text" id="contact" name="contact" placeholder="Contact*" required><br>
+      <label for=""><textarea id="message" name="message" placeholder="Enter your Message"></textarea></label><br>
+      <button type="submit">SEND MESSAGE</button>
+  </form>
+
+
+
+    <footer>
+      <div class="x">
+        <div class="I">
+          <p><strong>SPIN <br></strong>& WIN</p>
+        </div>
+
+        <div class="ii">
+          <p><strong>company</strong></p><br>
+          <p><a href="blog.html">Blog</a></p>
+          <p><a href="privacy.html">Privacy and Policy</a></p>
+          <p>FAQ'S</p><br>
+          <p><a href="contact.html">Contact Us</a></p>
+        </div>
+
+        <div class="iii">
+           <p><strong>Contact Us</strong></p><br> 
+           <p>twotimes678@gmail.com</p><br>
+           <p>Takoradi, Axim "GHANA"</p><br>
+           <p><a href="https://wa.me/+233530728551?text">Call or WhatsApp</a></p>
+        </div>
+
+        <div class="iv">
+          <p><strong>Quick Link</strong></p><br>
+          <p><a href="indexx.html">Home</a></p><br>
+          <p><a href="about.html">About Us</a></p><br>
+          <p><a href="contact.html">Contact Us</a></p><br>
+        </div>
+
+        <div class="vv">
+          <p><strong>Social Share</strong></p><br>
+          <p><a href="https://wa.me/+233530728551?text">WhatsApp</a></p><br>
+          <p>Facebook</p><br>
+          <p>Instagram</p><br>
+          <p>LinkedIn</p>
+        </div>
+      </div>
+
+      <div class="vi"><p>Copyright &copy; 2024 | Powered by <strong>TIMES TWO</strong></p></div>
+  </footer>
+
+
+    <script src="script.js"></script>
+    <script>
+      function displayProfile() {
+    let userName = localStorage.getItem("userName");
+    if (userName) {
+        let initials = userName.split(" ").map(n => n[0]).join("").toUpperCase();
+        document.getElementById("profile").textContent = initials;
+    }
+}
+displayProfile();
+
+
+function validateForm(event) {
+        let name = document.getElementById("name").value.trim();
+        let email = document.getElementById("email").value.trim();
+        let contact = document.getElementById("contact").value.trim();
+        let message = document.getElementById("message").value.trim();
+    
+        if (name === "" || email === "" || contact === "" || message === "") {
+            alert("Please fill in all fields before sending the message.");
+            event.preventDefault(); // Stop form submission
+            return false;
+        } else {
+            alert("Your message has been sent!");
+        }
+    }
+
+
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Spin & Win</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <div class="auth-container">
+    <h2>Login to Your Account</h2>
+    <form onsubmit="loginUser(event)">
+      <input type="email" id="loginEmail" placeholder="Email" required>
+      <input type="password" id="loginPassword" placeholder="Password" required>
+      <button type="submit">Login</button>
+      <p><a href="forgot.html">Forgot your password?</a></p>
+      <p>Don't have an account? <a href="signup.html">Create one</a></p>
+    </form>
+  </div>
+  <script>
+  function loginUser(event) {
+    event.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    const storedUser = JSON.parse(localStorage.getItem(email));
+
+    if (storedUser && storedUser.password === password) {
+      alert("Login successful!");
+      localStorage.setItem("currentUser", email); // Optional: store logged-in user
+      window.location.href = "indexx.html"; // Redirect to homepage
+    } else {
+      alert("Invalid email or password");
+    }
+  }
+
+  </script>
+</body>
+</html>
