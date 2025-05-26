@@ -212,7 +212,7 @@ function buyCoins() {
 /* --- GOOGLE ADSENSE REWARDED ADS --- */
 
 // Replace this with your actual AdSense rewarded ad client and slot IDs:
-const adsenseRewardedAdClient = "ca-pub-XXXXXXXXXXXXXXXX"; // Your AdSense publisher ID
+const adsenseRewardedAdClient = "pub-8630603554537037"; // Your AdSense publisher ID
 const adsenseRewardedAdSlot = "1234567890"; // Your Rewarded Ad Unit ID
 
 // Enable button only after Ads script loads

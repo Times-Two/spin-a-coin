@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Referral Program Explained</title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8630603554537037"
+     crossorigin="anonymous"></script>
   <link rel="stylesheet" href="blog.css">
 </head>
 <body>
@@ -21,45 +23,20 @@
   </main>
 
   <div class="referral-box">
-  <h3>Invite Friends & Earn Coins</h3>
-  <p>Share this link with your friends. When they create an account, you earn 50 coins!</p>
-  <input type="text" id="refLink" readonly>
-  <button onclick="copyReferralLink()">Copy Link</button>
-</div>
-<script>
-  const currentUserEmail = localStorage.getItem("loggedInUser");
-  if (currentUserEmail) {
-    const encodedEmail = encodeURIComponent(currentUserEmail);
-    const referralLink = `${window.location.origin}/signup.html?ref=${encodedEmail}`;
-    document.getElementById("refLink").value = referralLink;
-  }
+    <h3>Invite Friends & Earn Coins</h3>
+    <p>Share this link with your friends. When they create an account, you earn 50 coins!</p>
+    <input type="text" id="refLink" readonly>
+    <button onclick="copyReferralLink()">Copy Link</button>
+  </div>
 
-  function copyReferralLink() {
-    const linkInput = document.getElementById("refLink");
-    linkInput.select();
-    linkInput.setSelectionRange(0, 99999); // For mobile
-    document.execCommand("copy");
-    alert("Referral link copied to clipboard!");
-  }
-
-</script>
-<div style="margin-top: 10px;">
-  <a id="whatsappShare" target="_blank">Share on WhatsApp</a><br>
-  <a id="facebookShare" target="_blank">Share on Facebook</a>
-</div>
-
-<script>
-  const shareText = `Join me on Spin & Win and earn coins! Use this link to sign up: ${document.getElementById("refLink").value}`;
-  document.getElementById("whatsappShare").href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-  document.getElementById("facebookShare").href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(document.getElementById("refLink").value)}`;
-</script>
-
+  <div style="margin-top: 10px;">
+    <a id="whatsappShare" target="_blank">Share on WhatsApp</a><br>
+    <a id="facebookShare" target="_blank">Share on Facebook</a>
+  </div>
 
   <footer>
     <div class="x">
-      <div class="I">
-        <p><strong>SPIN <br></strong>& WIN</p>
-      </div>
+      <div class="I"><p><strong>SPIN <br></strong>& WIN</p></div>
 
       <div class="ii">
         <p><strong>company</strong></p><br>
@@ -70,10 +47,10 @@
       </div>
 
       <div class="iii">
-         <p><strong>Contact Us</strong></p><br> 
-         <p>twotimes678@gmail.com</p><br>
-         <p>Takoradi, Axim "GHANA"</p><br>
-         <p><a href="https://wa.me/+233530728551?text">Call or WhatsApp</a></p>
+        <p><strong>Contact Us</strong></p><br> 
+        <p>twotimes678@gmail.com</p><br>
+        <p>Takoradi, Axim "GHANA"</p><br>
+        <p><a href="https://wa.me/+233530728551?text">Call or WhatsApp</a></p>
       </div>
 
       <div class="iv">
@@ -91,8 +68,30 @@
         <p>LinkedIn</p>
       </div>
     </div>
-
-    <div class="vi"><p>Copyright &copy; 2024 | Powered by <strong>TIMES TWO</strong></p></div>
+    <div class="vi"><p>&copy; 2024 | Powered by <strong>TIMES TWO</strong></p></div>
   </footer>
+
+  <script>
+    const currentUserEmail = localStorage.getItem("loggedInUser");
+    if (currentUserEmail) {
+      const encodedEmail = encodeURIComponent(currentUserEmail);
+      const repoPath = window.location.pathname.split('/').slice(0, -1).join('/');
+      const referralLink = `${window.location.origin}${repoPath}/create.html?ref=${encodedEmail}`;
+      document.getElementById("refLink").value = referralLink;
+
+      // Set up sharing links
+      const shareText = `Join me on Spin & Win and earn coins! Use this link to sign up: ${referralLink}`;
+      document.getElementById("whatsappShare").href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+      document.getElementById("facebookShare").href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink)}`;
+    }
+
+    function copyReferralLink() {
+      const linkInput = document.getElementById("refLink");
+      linkInput.select();
+      linkInput.setSelectionRange(0, 99999); // For mobile
+      document.execCommand("copy");
+      alert("Referral link copied to clipboard!");
+    }
+  </script>
 </body>
 </html>
