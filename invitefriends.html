@@ -30,7 +30,7 @@
   const currentUserEmail = localStorage.getItem("loggedInUser");
   if (currentUserEmail) {
     const encodedEmail = encodeURIComponent(currentUserEmail);
-    const referralLink = `${window.location.origin}/create.html?ref=${encodedEmail}`;
+    const referralLink = `${window.location.origin}/signup.html?ref=${encodedEmail}`;
     document.getElementById("refLink").value = referralLink;
   }
 
