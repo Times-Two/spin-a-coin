@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Play Game & Earning Money</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .page {
+      display: none;
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .header {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 0 0 20px 20px;
+      margin-bottom: 20px;
+    }
+
+    .menu-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .trophy {
+      font-size: 24px;
+      color: #ffd700;
+    }
+
+    .user-info {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 15px;
+      border-radius: 15px;
+      margin: 0 20px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .user-avatar {
+      width: 50px;
+      height: 50px;
+      background: #333;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+    }
+
+    .user-details h3 {
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .user-details p {
+      color: #007bff;
+      font-weight: bold;
+    }
+
+    .game-container {
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .game-container a{
+        text-decoration: none;
+    }
+
+    .game-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .game-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .game-info {
+      flex: 1;
+    }
+
+    .game-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .game-subtitle {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .wheel {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: conic-gradient(
+        #ff6b6b 0deg 45deg,
+        #4ecdc4 45deg 90deg,
+        #45b7d1 90deg 135deg,
+        #96ceb4 135deg 180deg,
+        #ffd93d 180deg 225deg,
+        #ff8cc8 225deg 270deg,
+        #a8e6cf 270deg 315deg,
+        #ffb3ba 315deg 360deg
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      animation: spin 4s linear infinite;
+    }
+
+    .wheel::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 15px solid #333;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .scratch-card, .quiz-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: white;
+      font-weight: bold;
+    }
+
+    .scratch-card {
+      background: linear-gradient(45deg, #ff9a56, #ffad56);
+    }
+
+    .quiz-icon {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 15px;
+      display: flex;
+      justify-content: space-around;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: #666;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .nav-item.active {
+      color: #007bff;
+    }
+
+    .nav-icon {
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    /* Wallet Page */
+    .wallet-content {
+      padding: 20px;
+    }
+
+    .balance-card {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 20px;
+      padding: 30px;
+      color: white;
+      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .balance-amount {
+      font-size: 48px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .balance-label {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .transaction-history {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 20px;
+    }
+
+    .transaction-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .transaction-item:last-child {
+      border-bottom: none;
+    }
+
+    .transaction-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .earning {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .spending {
+      background: #f8d7da;
+      color: #721c24;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Home Page -->
+  <div class="page active" id="homePage">
+    <div class="header">
+      <button class="menu-btn">&#9776;</button>
+      <div class="header-title">Play & Earn</div>
+      <div class="trophy">&#127942;</div>
+    </div>
+
+    <div class="user-info">
+      <div class="user-avatar">T</div>
+      <div class="user-details">
+        <h3>TheoCodesx</h3>
+        <p>$100.00</p>
+      </div>
+    </div>
+
+    <div class="game-container">
+      <a href="spin.html"><div class="game-card">
+        <div class="game-info">
+          <div class="game-title">Spin & Win</div>
+          <div class="game-subtitle">Spin the wheel & earn coins</div>
+        </div>
+        <div class="wheel"></div>
+      </div></a>
+
+      <a href="scratch.html"><div class="game-card">
+        <div class="game-info">
+          <div class="game-title">Scratch Card</div>
+          <div class="game-subtitle">Scratch and get rewards</div>
+        </div>
+        <div class="scratch-card">SC</div>
+      </div></a>
+
+      <a href="quiz.html"><div class="game-card">
+        <div class="game-info">
+          <div class="game-title">Quiz Game</div>
+          <div class="game-subtitle">Answer & win points</div>
+        </div>
+        <div class="quiz-icon">QZ</div>
+      </div></a>
+    </div>
+  </div>
+
+  <!-- Wallet Page -->
+  <div class="page" id="walletPage">
+    <div class="header">
+      <div class="header-title">My Wallet</div>
+    </div>
+
+    <div class="wallet-content">
+      <div class="balance-card">
+        <div class="balance-amount">$100.00</div>
+        <div class="balance-label">Total Balance</div>
+      </div>
+
+      <div class="transaction-history">
+        <div class="transaction-item">
+          <div class="transaction-icon earning">+</div>
+          <div>Spin Win</div>
+          <div>+$10.00</div>
+        </div>
+        <div class="transaction-item">
+          <div class="transaction-icon spending">-</div>
+          <div>Scratch Loss</div>
+          <div>-$5.00</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="switchPage('homePage', this)">
+      <div class="nav-icon">&#8962;</div>
+      <div>Home</div>
+    </div>
+    <div class="nav-item" onclick="switchPage('walletPage', this)">
+      <div class="nav-icon">&#128179;</div>
+      <div>Wallet</div>
+    </div>
+  </div>
+
+  <script>
+    function switchPage(pageId, element) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+
+      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+      element.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>

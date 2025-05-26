@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daily Quiz Game</title>
+  <link rel="stylesheet" href="quiz.css" />
+</head>
+<body>
+
+  <header>
+    <ul>
+      <li><a href="spin.html">Spin & Win</a></li>
+      <li><a href="quiz.html">Spin & Win</a></li>
+      <li><a href="scratch.html">Spin & Win</a></li>
+    </ul>
+  </header>
+  
+  <div class="header">
+    <h1>Daily Quiz Game</h1>
+    <div id="user-info"></div>
+    <button id="logout-btn" style="display:none;">Logout</button>
+  </div>
+
+  <div id="login-area">
+    <h2>Login</h2>
+    <input type="text" id="user-input" placeholder="Enter username or email" />
+    <button id="login-btn">Login</button>
+  </div>
+
+  <div id="quiz-area" style="display:none;">
+    <div class="question-area">
+      <div id="question-text"></div>
+      <div id="options-container"></div>
+    </div>
+    <div id="timer">Time Left: <span id="time-remaining">15</span>s</div>
+    <button id="next-btn" disabled>Next Question</button>
+    <div id="result-message"></div>
+    <div id="score-display">Score: 0</div>
+    <button id="restart-btn" style="display:none;">Restart Quiz</button>
+  </div>
+
+  <script src="quiz.js"></script>
+</body>
+</html>

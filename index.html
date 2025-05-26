@@ -1,97 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Spin & Win</title>
-<!-- Paystack inline script -->
-<script src="https://js.paystack.co/v1/inline.js"></script>
-<!-- Google AdSense rewarded ads script -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8630603554537037"
-     crossorigin="anonymous"></script>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome Page</title>
+  <link rel="stylesheet" href="home.css" />
 </head>
 <body>
-
   <div class="container">
-    <h1>🎯 Spin & Win!</h1>
-
-    <div class="wheel-container">
-      <div class="pointer"></div>
-      <canvas id="wheel" width="280" height="280"></canvas>
+    <div class="image-container">
+      <img src="Meditating Person.jpg" alt="Meditating Person" class="character" />
     </div>
-
-    <div class="coins">Coins: <span id="coinCount">0</span></div>
-    <p id="spinCountDisplay">Spins left: 3</p>
-
-    <div>
-      <button class="spin-btn" id="spinBtn" onclick="spin()">SPIN</button>
-    </div>
-
-    <div>
-      <button class="ad-btn" id="watchAdBtn" onclick="watchAd()" disabled>Watch Ad to Earn 5 Coins + 1 Spin</button>
-      <p id="adMessage" class="message"></p>
-    </div>
-
-    <div>
-      <button class="purchase-btn" onclick="buyCoins()">Buy 50 Coins + 3 Spins (₵0.99)</button>
-      <p id="purchaseMessage" class="message"></p>
-    </div>
-
-    <div class="redeem">
-      <h3>Redeem Points</h3>
-      <p>You need 100 coins to redeem 5 GHS</p>
-      <input type="text" id="phoneInput" placeholder="Enter phone number" />
-      <button class="redeem-btn" onclick="redeem()">Redeem Now</button>
-      <p id="redeemMessage" class="message"></p>
-    </div>
-
-    <!-- Debug info - remove in production -->
-    <div id="debugInfo" class="debug-info" style="display: none;"></div>
+    <h1>Hello Welcome!</h1>
+    <p class="subtitle">Choose an option from below to <span class="highlight"><a href="privacy.html">continue</a></span> to the app</p>
+    <p class="extra">Create Account Spin & Scratch</p>
+    <button class="signup-btn"><a href="privacy.html">Signup</a></button>
   </div>
-
-  <footer>
-    <div class="x">
-      <div class="I">
-        <p><strong>SPIN <br></strong>& WIN</p>
-      </div>
-
-      <div class="ii">
-        <p><strong>company</strong></p><br>
-        <p><a href="blog.html">Blog</a></p>
-        <p><a href="privacy.html">Privacy and Policy</a></p>
-        <p>FAQ'S</p><br>
-        <p><a href="contact.html">Contact Us</a></p>
-      </div>
-
-      <div class="iii">
-         <p><strong>Contact Us</strong></p><br> 
-         <p>twotimes678@gmail.com</p><br>
-         <p>Takoradi, Axim "GHANA"</p><br>
-         <p><a href="https://wa.me/+233530728551?text">Call or WhatsApp</a></p>
-      </div>
-
-      <div class="iv">
-        <p><strong>Quick Link</strong></p><br>
-        <p><a href="index.html">Home</a></p><br>
-        <p><a href="about.html">About Us</a></p><br>
-        <p><a href="contact.html">Contact Us</a></p><br>
-      </div>
-
-      <div class="vv">
-        <p><strong>Social Share</strong></p><br>
-        <p><a href="https://wa.me/+233530728551?text">WhatsApp</a></p><br>
-        <p>Facebook</p><br>
-        <p>Instagram</p><br>
-        <p>LinkedIn</p>
-      </div>
-    </div>
-
-    <div class="vi"><p>Copyright &copy; 2024 | Powered by <strong>TIMES TWO</strong></p></div>
-</footer>
-
-  <script src="index.js"></script>
-
-
 </body>
 </html>

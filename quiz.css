@@ -1,0 +1,100 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 10px;
+    background: #f4f4f9;
+    color: #333;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+
+  }
+  
+  h1 {
+    margin: 0;
+    font-size: 2rem;
+  }
+  
+  #login-area,
+  #quiz-area {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  }
+  
+  input[type="text"] {
+    padding: 8px;
+    width: 80%;
+    margin-right: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+  }
+  
+  button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+  }
+  
+  #question-text {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+  }
+  
+  #options-container button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: left;
+    background-color: #e7e7e7;
+    color: #333;
+  }
+  
+  #options-container button.correct {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  #options-container button.wrong {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  #timer {
+    margin: 10px 0;
+    font-weight: bold;
+  }
+  
+  #result-message {
+    margin: 15px 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+  
+  #score-display {
+    font-size: 1.1rem;
+    margin-top: 15px;
+  }
+  @media (max-width: 768px) {
+    h1 {
+        margin: 0;
+        font-size: 1rem;
+      }
+  }
+  

@@ -299,32 +299,32 @@ function watchAd() {
 
 /* --- REDEEM --- */
 
-function redeem() {
-  const phoneInput = document.getElementById("phoneInput");
-  const phone = phoneInput.value.trim();
-  const redeemMessage = document.getElementById("redeemMessage");
-  const phonePattern = /^[0-9]{8,15}$/;
+// function redeem() {
+//   const phoneInput = document.getElementById("phoneInput");
+//   const phone = phoneInput.value.trim();
+//   const redeemMessage = document.getElementById("redeemMessage");
+//   const phonePattern = /^[0-9]{8,15}$/;
 
-  if (!phone) {
-    redeemMessage.textContent = "❌ Please enter your phone number.";
-    redeemMessage.className = "message error";
-    return;
-  }
-  if (!phonePattern.test(phone)) {
-    redeemMessage.textContent = "❌ Invalid phone number format.";
-    redeemMessage.className = "message error";
-    return;
-  }
-  if (coins < 100) {
-    redeemMessage.textContent = "❌ Not enough coins to redeem.";
-    redeemMessage.className = "message error";
-    return;
-  }
+//   if (!phone) {
+//     redeemMessage.textContent = "❌ Please enter your phone number.";
+//     redeemMessage.className = "message error";
+//     return;
+//   }
+//   if (!phonePattern.test(phone)) {
+//     redeemMessage.textContent = "❌ Invalid phone number format.";
+//     redeemMessage.className = "message error";
+//     return;
+//   }
+//   if (coins < 100) {
+//     redeemMessage.textContent = "❌ Not enough coins to redeem.";
+//     redeemMessage.className = "message error";
+//     return;
+//   }
 
-  coins -= 100;
-  localStorage.setItem("coins", coins);
-  document.getElementById("coinCount").innerText = coins;
-  redeemMessage.textContent = `✅ Redemption successful! We will contact you on ${phone}.`;
-  redeemMessage.className = "message success";
-  phoneInput.value = "";
-}
+//   coins -= 100;
+//   localStorage.setItem("coins", coins);
+//   document.getElementById("coinCount").innerText = coins;
+//   redeemMessage.textContent = `✅ Redemption successful! We will contact you on ${phone}.`;
+//   redeemMessage.className = "message success";
+//   phoneInput.value = "";
+// }
