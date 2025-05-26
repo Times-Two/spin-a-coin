@@ -7,12 +7,11 @@ const colors = ["#f44336", "#4caf50", "#2196f3", "#ff9800", "#9c27b0", "#00bcd4"
 let spinning = false;
 let currentAngle = 0;
 
-let coins = localStorage.getItem("coins") ? parseInt(localStorage.getItem("coins")) : 0;
+let coins = parseInt(localStorage.getItem("coins") || "0");
 document.getElementById("coinCount").innerText = coins;
 
-let bonusSpins = localStorage.getItem("bonusSpins") ? parseInt(localStorage.getItem("bonusSpins")) : 0;
+let bonusSpins = parseInt(localStorage.getItem("bonusSpins") || "0");
 
-// Debug mode toggle (set to false in production)
 const DEBUG_MODE = false;
 
 function getToday() {
@@ -93,11 +92,10 @@ function debugLog(message) {
 }
 
 function spin() {
-  // ✅ Check for sign-in
   const userEmail = localStorage.getItem("userEmail");
   if (!userEmail) {
     alert("Please sign in or sign up before spinning the wheel.");
-    window.location.href = "login.html"; // Redirect to your login page
+    window.location.href = "privacy.html";
     return;
   }
 
@@ -128,7 +126,6 @@ function spin() {
     const now = Date.now();
     const elapsed = now - start;
     const progress = Math.min(elapsed / spinTime, 1);
-
     const eased = 1 - Math.pow(1 - progress, 3);
     const currentRotation = currentAngle + (totalSpin * eased);
     canvas.style.transform = `rotate(${currentRotation}deg)`;
@@ -139,7 +136,7 @@ function spin() {
       currentAngle = finalAngle;
       const normalizedAngle = (360 - (finalAngle % 360)) % 360;
       const sliceAngle = 360 / slices;
-      const adjustedAngle = (normalizedAngle + (sliceAngle / 2)) % 360;
+      const adjustedAngle = (normalizedAngle + sliceAngle / 2) % 360;
       const sliceIndex = Math.floor(adjustedAngle / sliceAngle);
 
       const reward = rewards[sliceIndex];
@@ -156,7 +153,7 @@ function spin() {
       if (spinCount < 3) {
         spinCount++;
         updateSpinCount(spinCount);
-      } else {
+      } else if (bonusSpins > 0) {
         bonusSpins--;
         localStorage.setItem("bonusSpins", bonusSpins);
       }
@@ -171,11 +168,13 @@ function spin() {
 }
 
 /* --- PAYSTACK PAYMENT --- */
+
 function buyCoins() {
   if (spinning) return;
   const purchaseMessage = document.getElementById("purchaseMessage");
   purchaseMessage.textContent = "";
 
+  // Get user email dynamically (prompt for demo)
   let email = prompt("Please enter your email for payment receipt:");
   if (!email || !email.includes("@")) {
     purchaseMessage.textContent = "❌ Valid email is required to proceed.";
@@ -184,11 +183,12 @@ function buyCoins() {
   }
 
   var handler = PaystackPop.setup({
-    key: 'pk_live_f2a29821ab0883d7ad01d0d29a9b91955088b70f',
+    key: 'YOUR_PAYSTACK_PUBLIC_KEY', // Replace with your Paystack public key
     email: email,
-    amount: 9900,
+    amount: 9900, // 0.99 GHS in kobo/pesewas (smallest currency unit)
     currency: 'GHS',
     callback: function(response) {
+      // Successful payment callback
       coins += 50;
       bonusSpins += 3;
       localStorage.setItem("coins", coins);
@@ -210,17 +210,22 @@ function buyCoins() {
 }
 
 /* --- GOOGLE ADSENSE REWARDED ADS --- */
-const adsenseRewardedAdClient = "pub-8630603554537037";
-const adsenseRewardedAdSlot = "1234567890";
 
+// Replace this with your actual AdSense rewarded ad client and slot IDs:
+const adsenseRewardedAdClient = "ca-pub-XXXXXXXXXXXXXXXX"; // Your AdSense publisher ID
+const adsenseRewardedAdSlot = "1234567890"; // Your Rewarded Ad Unit ID
+
+// Enable button only after Ads script loads
 window.onload = function() {
   if (typeof window.adsbygoogle !== "undefined") {
     document.getElementById("watchAdBtn").disabled = false;
   }
 };
 
+// Rewarded ad instance holder
 let rewardedAd;
 
+// Load the rewarded ad
 function loadRewardedAd() {
   rewardedAd = new window.adsbygoogle.RewardedAd({
     adClient: adsenseRewardedAdClient,
@@ -242,11 +247,11 @@ function watchAd() {
     document.getElementById("adMessage").textContent = "⚠️ Ad not loaded yet. Try again shortly.";
     return;
   }
-
   const adMessage = document.getElementById("adMessage");
   adMessage.textContent = "Playing ad...";
 
   rewardedAd.show().then(() => {
+    // User watched ad fully, reward them
     coins += 5;
     bonusSpins++;
     localStorage.setItem("coins", coins);
@@ -255,12 +260,47 @@ function watchAd() {
     updateSpinDisplay();
     adMessage.textContent = "✅ Thanks for watching! You earned 5 coins and 1 spin.";
 
+    // Reload ad for next watch
     loadRewardedAd();
+
     setTimeout(() => {
       adMessage.textContent = "";
     }, 6000);
   }).catch((err) => {
-    console.error("Ad failed:", err);
-    adMessage.textContent = "❌ Failed to play ad.";
+    console.error("Ad failed or skipped:", err);
+    adMessage.textContent = "❌ Ad not completed. No reward given.";
+    setTimeout(() => { adMessage.textContent = ""; }, 4000);
   });
+}
+
+/* --- REDEEM --- */
+
+function redeem() {
+  const phoneInput = document.getElementById("phoneInput");
+  const phone = phoneInput.value.trim();
+  const redeemMessage = document.getElementById("redeemMessage");
+  const phonePattern = /^[0-9]{8,15}$/;
+
+  if (!phone) {
+    redeemMessage.textContent = "❌ Please enter your phone number.";
+    redeemMessage.className = "message error";
+    return;
+  }
+  if (!phonePattern.test(phone)) {
+    redeemMessage.textContent = "❌ Invalid phone number format.";
+    redeemMessage.className = "message error";
+    return;
+  }
+  if (coins < 100) {
+    redeemMessage.textContent = "❌ Not enough coins to redeem.";
+    redeemMessage.className = "message error";
+    return;
+  }
+
+  coins -= 100;
+  localStorage.setItem("coins", coins);
+  document.getElementById("coinCount").innerText = coins;
+  redeemMessage.textContent = `✅ Redemption successful! We will contact you on ${phone}.`;
+  redeemMessage.className = "message success";
+  phoneInput.value = "";
 }
