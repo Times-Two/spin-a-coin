@@ -11,39 +11,92 @@
 </head>
 <body>
 
-  <header>
+ <header>
     <ul>
       <li><a href="spin.html">Spin & Win</a></li>
       <li><a href="quiz.html">Quiz Game</a></li>
       <li><a href="scratch.html">Scratch Card</a></li>
+      <li><a href="home.html">Homes</a></li>
     </ul>
   </header>
-
+  
   <div class="container">
-
     <h1>🎯 Spin & Win!</h1>
+    
+    <div class="game-stats">
+      <div class="stat-box">
+        <h3>Coins</h3>
+        <div class="value" id="coinCount">0</div>
+      </div>
+      <div class="stat-box">
+        <h3>GHS Balance</h3>
+        <div class="value" id="ghsBalance">0.00</div>
+      </div>
+      <div class="stat-box">
+        <h3>Daily Spins</h3>
+        <div class="value" id="spinCountDisplay">5/5</div>
+      </div>
+    </div>
 
     <div class="wheel-container">
       <div class="pointer"></div>
       <canvas id="wheel" width="320" height="320"></canvas>
     </div>
 
-    <div class="coins">Coins: <span id="coinCount">0</span></div>
-    <p id="spinCountDisplay">Spins left: 3</p>
-
-    <div>
-      <button class="spin-btn" id="spinBtn" onclick="spin()">SPIN</button>
+    <div class="controls">
+      <div class="spin-section">
+        <h3>Place Your Bet</h3>
+        <div class="betting-section">
+          <button class="bet-option" id="highBet" onclick="selectBet('high')">
+            🔺 HIGH (51-100)
+          </button>
+          <button class="bet-option" id="lowBet" onclick="selectBet('low')">
+            🔻 LOW (1-50)
+          </button>
+        </div>
+        
+        <div class="bet-amount">
+          <label>Bet Amount (Optional):</label>
+          <input type="number" id="betAmount" min="0" max="1000" value="0" placeholder="0">
+          <span>coins</span>
+        </div>
+        
+        <p style="font-size: 0.9em; opacity: 0.8; margin: 10px 0;">
+          💡 Betting is optional! You'll always get 5-25 coins per daily spin.
+        </p>
+        
+        <button class="spin-btn" id="spinBtn" onclick="spin()">SPIN TO WIN!</button>
+        <p id="spinResult" class="message"></p>
+      </div>
     </div>
 
-    <div>
-      <button class="ad-btn" id="watchAdBtn" onclick="watchAd()" disabled>Watch Ad to Earn 5 Coins + 1 Spin</button>
-      <p id="adMessage" class="message"></p>
+    <div class="additional-spins">
+      <button class="ad-btn" id="watchAdBtn" onclick="watchAd()">
+        📺 Watch Ad (+2 Spins)
+      </button>
+      <button class="purchase-btn" onclick="buySpins()">
+        💰 Buy 5 Spins (2 GHS)
+      </button>
     </div>
 
-    <div>
-      <button class="purchase-btn" onclick="buyCoins()">Buy 50 Coins + 3 Spins (₵0.99)</button>
-      <p id="purchaseMessage" class="message"></p>
+    <div class="wallet-section">
+      <h3>💳 Wallet & Rewards</h3>
+      <button class="redeem-btn" id="redeemBtn" onclick="redeemCoins()" disabled>
+        🎁 Redeem 1000 Coins → 40 GHS
+      </button>
+      
+      <div class="deposit-form">
+        <label>Deposit GHS:</label>
+        <input type="number" id="depositAmount" min="1" step="0.01" placeholder="0.00">
+        <button class="deposit-btn" onclick="depositGHS()">Deposit</button>
+      </div>
+      
+      <p id="walletMessage" class="message"></p>
     </div>
+
+    <div id="adMessage" class="message"></div>
+    <div id="purchaseMessage" class="message"></div>
+  </div>
 
   <footer>
     <div class="x">

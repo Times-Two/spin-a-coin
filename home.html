@@ -288,6 +288,66 @@
       background: #f8d7da;
       color: #721c24;
     }
+      footer {
+    background-color: #222;
+    color: #eee;
+    padding: 30px 20px 15px;
+    margin-top: auto;
+    font-size: 0.9rem;
+  }
+  
+  footer .x {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto 20px;
+    gap: 30px;
+  }
+  
+  footer .x > div {
+    flex: 1 1 160px;
+    min-width: 160px;
+  }
+  
+  footer .x p {
+    margin-bottom: 10px;
+  }
+  
+  footer .x p strong {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    color: #1abc9c;
+  }
+  
+  footer .x a {
+    color: #1abc9c;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  footer .x a:hover {
+    color: #16a085;
+  }
+  
+  footer .vi {
+    text-align: center;
+    border-top: 1px solid #444;
+    padding-top: 12px;
+    font-size: 0.85rem;
+    color: #aaa;
+  }
+  @media screen and (max-width:600px){
+  footer .x {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  footer .x > div {
+    min-width: auto;
+  }
+  }
   </style>
 </head>
 <body>
@@ -295,18 +355,17 @@
   <!-- Home Page -->
   <div class="page active" id="homePage">
     <div class="header">
-      <button class="menu-btn">&#9776;</button>
       <div class="header-title">Play & Earn</div>
       <div class="trophy">&#127942;</div>
     </div>
 
-    <div class="user-info">
+    <!-- <div class="user-info">
       <div class="user-avatar">T</div>
       <div class="user-details">
         <h3>TheoCodesx</h3>
         <p>$100.00</p>
       </div>
-    </div>
+    </div> -->
 
     <div class="game-container">
       <a href="spin.html"><div class="game-card">
@@ -335,44 +394,53 @@
     </div>
   </div>
 
-  <!-- Wallet Page -->
-  <div class="page" id="walletPage">
-    <div class="header">
-      <div class="header-title">My Wallet</div>
-    </div>
-
-    <div class="wallet-content">
-      <div class="balance-card">
-        <div class="balance-amount">$100.00</div>
-        <div class="balance-label">Total Balance</div>
-      </div>
-
-      <div class="transaction-history">
-        <div class="transaction-item">
-          <div class="transaction-icon earning">+</div>
-          <div>Spin Win</div>
-          <div>+$10.00</div>
-        </div>
-        <div class="transaction-item">
-          <div class="transaction-icon spending">-</div>
-          <div>Scratch Loss</div>
-          <div>-$5.00</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- Bottom Navigation -->
   <div class="bottom-nav">
     <div class="nav-item active" onclick="switchPage('homePage', this)">
       <div class="nav-icon">&#8962;</div>
       <div>Home</div>
     </div>
-    <div class="nav-item" onclick="switchPage('walletPage', this)">
-      <div class="nav-icon">&#128179;</div>
-      <div>Wallet</div>
-    </div>
   </div>
+
+  <footer>
+      <div class="x">
+        <div class="I">
+          <p><strong>SPIN <br></strong>& WIN</p>
+        </div>
+
+        <div class="ii">
+          <p><strong>company</strong></p><br>
+          <p><a href="blog.html">Blog</a></p>
+          <p><a href="privacy.html">Privacy and Policy</a></p>
+          <p>FAQ'S</p><br>
+          <p><a href="contact.html">Contact Us</a></p>
+        </div>
+
+        <div class="iii">
+           <p><strong>Contact Us</strong></p><br> 
+           <p>twotimes678@gmail.com</p><br>
+           <p>Takoradi, Axim "GHANA"</p><br>
+           <p><a href="https://wa.me/+233530728551?text">Call or WhatsApp</a></p>
+        </div>
+
+        <div class="iv">
+          <p><strong>Quick Link</strong></p><br>
+          <p><a href="home.html">Home</a></p><br>
+          <p><a href="about.html">About Us</a></p><br>
+          <p><a href="contact.html">Contact Us</a></p><br>
+        </div>
+
+        <div class="vv">
+          <p><strong>Social Share</strong></p><br>
+          <p><a href="https://wa.me/+233530728551?text">WhatsApp</a></p><br>
+          <p>Facebook</p><br>
+          <p>Instagram</p><br>
+          <p>LinkedIn</p>
+        </div>
+      </div>
+
+      <div class="vi"><p>Copyright &copy; 2024 | Powered by <strong>TIMES TWO</strong></p></div>
+  </footer>
 
   <script>
     function switchPage(pageId, element) {

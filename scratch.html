@@ -3,18 +3,416 @@
 <head>
   <meta charset="UTF-8">
   <title>Scratch & Win</title>
-  <link rel="stylesheet" href="scratch.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+    }
+
+    header {
+      width: 100%;
+      max-width: 800px;
+      margin-bottom: 20px;
+    }
+
+    header ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+    }
+
+    header a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      transition: background 0.3s;
+    }
+
+    header a:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .scratch-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .title {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+
+    .scratch-area {
+      position: relative;
+      margin: 20px auto;
+      width: 300px;
+      height: 150px;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    #reward {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      border-radius: 15px;
+    }
+
+    #scratchCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: crosshair;
+      border-radius: 15px;
+    }
+
+    .bonus-display {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 20px 0;
+      border: 2px solid #4ecdc4;
+    }
+
+    .bonus-points {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .game-section {
+      margin-top: 20px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 15px;
+      border: 2px solid #ddd;
+    }
+
+    .game-section.hidden {
+      display: none;
+    }
+
+    .betting-area {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .bet-input {
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      width: 120px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .game-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: #4ecdc4;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #45b7b8;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: #6c5ce7;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #5f3dc4;
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background: #ff6b6b;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #ff5252;
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background: #00b894;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #00a085;
+      transform: translateY(-2px);
+    }
+
+    .card-display {
+      font-size: 48px;
+      margin: 20px 0;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      border: 2px solid #ddd;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .result-message {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 15px 0;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .win {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .lose {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .reward-selection {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 15px 0;
+    }
+
+    .reward-btn {
+      padding: 10px 15px;
+      background: #17a2b8;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .reward-btn:hover {
+      background: #138496;
+    }
+    footer {
+    background-color: #222;
+    color: #eee;
+    padding: 30px 20px 15px;
+    margin-top: auto;
+    font-size: 0.9rem;
+  }
+  
+  footer .x {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto 20px;
+    gap: 30px;
+  }
+  
+  footer .x > div {
+    flex: 1 1 160px;
+    min-width: 160px;
+  }
+  
+  footer .x p {
+    margin-bottom: 10px;
+  }
+  
+  footer .x p strong {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    color: #1abc9c;
+  }
+  
+  footer .x a {
+    color: #1abc9c;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  footer .x a:hover {
+    color: #16a085;
+  }
+  
+  footer .vi {
+    text-align: center;
+    border-top: 1px solid #444;
+    padding-top: 12px;
+    font-size: 0.85rem;
+    color: #aaa;
+  }
+
+    @media (max-width: 600px) {
+      header ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  header a {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    font-size: 18px;
+  }
+
+  .scratch-wrapper {
+    padding: 0 15px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  .scratch-area {
+    width: 90%;
+    height: 130px;
+  }
+
+  .bonus-display {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .bonus-points {
+    font-size: 18px;
+  }
+
+  .betting-area,
+  .game-buttons,
+  .reward-selection {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .bet-input {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  .btn {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  .card-display {
+    font-size: 36px;
+    padding: 15px;
+  }
+
+  .result-message {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  .reward-btn {
+    width: 100%;
+    font-size: 16px;
+  }
+  footer .x {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  footer .x > div {
+    min-width: auto;
+  }
+  }
+  </style>
 </head>
 <body>
   <header>
-    <!-- <ul>
+    <ul>
       <li><a href="spin.html">Spin & Win</a></li>
-      <li><a href="quiz.html">Spin & Win</a></li>
-      <li><a href="scratch.html">Spin & Win</a></li>
+      <li><a href="quiz.html">Quiz Game</a></li>
+      <li><a href="scratch.html">Scratch Card</a></li>
+      <li><a href="home.html">Home</a></li>
     </ul>
-  </header> -->
-
+  </header>
+  
   <div class="scratch-wrapper">
+    <!-- Scratch Card Section -->
     <div class="card">
       <h2 class="title">🎁 Daily Scratch & Win</h2>
       <p class="subtitle" id="status">Scratch to reveal your reward</p>
@@ -24,10 +422,300 @@
         <canvas id="scratchCanvas" width="300" height="150"></canvas>
       </div>
 
-      <button id="backBtn">🔙 Back to Quiz</button>
+      <div class="bonus-display">
+        <div class="bonus-points" id="bonusDisplay">Bonus Points: 0</div>
+      </div>
+
+      <button id="backBtn" class="btn btn-secondary">🔙 Back to Quiz</button>
+    </div>
+
+    <!-- High/Low Game Section -->
+    <div class="card">
+      <div class="game-section" id="highLowGame">
+        <h2 class="title">🎲 High or Low Challenge</h2>
+        <p class="subtitle">Bet your bonus points! Guess if the card number is higher or lower than 50</p>
+        
+        <div class="betting-area">
+          <input type="number" id="betAmount" class="bet-input" placeholder="Bet amount" min="1" max="0">
+          <div style="display: flex; align-items: center; color: #666;">
+            Max: <span id="maxBet">0</span> points
+          </div>
+        </div>
+
+        <div class="game-buttons">
+          <button id="highBtn" class="btn btn-danger">📈 HIGH (51-100)</button>
+          <button id="lowBtn" class="btn btn-primary">📉 LOW (1-50)</button>
+        </div>
+
+        <div class="card-display" id="cardDisplay">
+          Place your bet and choose High or Low!
+        </div>
+
+        <div id="gameResult"></div>
+        
+        <div id="rewardSection" class="hidden">
+          <h3>🎉 You Won! Choose your reward:</h3>
+          <div class="reward-selection">
+            <button class="reward-btn" onclick="claimReward('2GHS Airtime')">📱 2GHS Airtime</button>
+            <button class="reward-btn" onclick="claimReward('Data Bundle')">📊 Data Bundle</button>
+            <button class="reward-btn" onclick="claimReward('Mashup')">🎵 Mashup</button>
+          </div>
+        </div>
+
+        <button id="newGameBtn" class="btn btn-success hidden">🎮 New Game</button>
+      </div>
     </div>
   </div>
 
-  <script src="scratch.js"></script>
+  <footer>
+      <div class="x">
+        <div class="I">
+          <p><strong>SPIN <br></strong>& WIN</p>
+        </div>
+
+        <div class="ii">
+          <p><strong>company</strong></p><br>
+          <p><a href="blog.html">Blog</a></p>
+          <p><a href="privacy.html">Privacy and Policy</a></p>
+          <p>FAQ'S</p><br>
+          <p><a href="contact.html">Contact Us</a></p>
+        </div>
+
+        <div class="iii">
+           <p><strong>Contact Us</strong></p><br> 
+           <p>twotimes678@gmail.com</p><br>
+           <p>Takoradi, Axim "GHANA"</p><br>
+           <p><a href="https://wa.me/+233530728551?text">Call or WhatsApp</a></p>
+        </div>
+
+        <div class="iv">
+          <p><strong>Quick Link</strong></p><br>
+          <p><a href="home.html">Home</a></p><br>
+          <p><a href="about.html">About Us</a></p><br>
+          <p><a href="contact.html">Contact Us</a></p><br>
+        </div>
+
+        <div class="vv">
+          <p><strong>Social Share</strong></p><br>
+          <p><a href="https://wa.me/+233530728551?text">WhatsApp</a></p><br>
+          <p>Facebook</p><br>
+          <p>Instagram</p><br>
+          <p>LinkedIn</p>
+        </div>
+      </div>
+
+      <div class="vi"><p>Copyright &copy; 2024 | Powered by <strong>TIMES TWO</strong></p></div>
+  </footer>
+
+  <script>
+    let bonusPoints = 0;
+    let gameInProgress = false;
+    let scratchRevealed = false;
+
+    // Scratch Card Logic
+    document.addEventListener('DOMContentLoaded', function() {
+      const canvas = document.getElementById('scratchCanvas');
+      const ctx = canvas.getContext('2d');
+      const statusEl = document.getElementById('status');
+      
+      // Create scratch surface
+      ctx.fillStyle = '#c0c0c0';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Add scratch texture
+      ctx.fillStyle = '#a0a0a0';
+      ctx.font = 'bold 16px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('SCRATCH HERE', canvas.width/2, canvas.height/2 - 10);
+      ctx.fillText('TO REVEAL PRIZE', canvas.width/2, canvas.height/2 + 10);
+      
+      let isScratching = false;
+      let scratchedArea = 0;
+      
+      function scratch(e) {
+        if (!isScratching) return;
+        
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(x, y, 20, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        // Check scratched area
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        let transparent = 0;
+        for (let i = 3; i < imageData.data.length; i += 4) {
+          if (imageData.data[i] === 0) transparent++;
+        }
+        
+        scratchedArea = (transparent / (canvas.width * canvas.height)) * 100;
+        
+        if (scratchedArea > 50 && !scratchRevealed) {
+          scratchRevealed = true;
+          bonusPoints = 5;
+          updateBonusDisplay();
+          statusEl.textContent = 'Congratulations! You won 5 bonus points!';
+          statusEl.style.color = '#00b894';
+          
+          // Clear canvas completely
+          setTimeout(() => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+          }, 500);
+        }
+      }
+      
+      canvas.addEventListener('mousedown', (e) => {
+        isScratching = true;
+        scratch(e);
+      });
+      
+      canvas.addEventListener('mousemove', scratch);
+      
+      canvas.addEventListener('mouseup', () => {
+        isScratching = false;
+      });
+      
+      // Touch support
+      canvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        isScratching = true;
+        const touch = e.touches[0];
+        const mouseEvent = new MouseEvent('mousedown', {
+          clientX: touch.clientX,
+          clientY: touch.clientY
+        });
+        canvas.dispatchEvent(mouseEvent);
+      });
+      
+      canvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const mouseEvent = new MouseEvent('mousemove', {
+          clientX: touch.clientX,
+          clientY: touch.clientY
+        });
+        canvas.dispatchEvent(mouseEvent);
+      });
+      
+      canvas.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        isScratching = false;
+      });
+    });
+
+    function updateBonusDisplay() {
+      document.getElementById('bonusDisplay').textContent = `Bonus Points: ${bonusPoints}`;
+      document.getElementById('maxBet').textContent = bonusPoints;
+      document.getElementById('betAmount').max = bonusPoints;
+      
+      if (bonusPoints > 0) {
+        document.getElementById('betAmount').placeholder = `1-${bonusPoints}`;
+      }
+    }
+
+    // High/Low Game Logic
+    function playHighLow(choice) {
+      const betAmount = parseInt(document.getElementById('betAmount').value);
+      
+      if (!betAmount || betAmount < 1 || betAmount > bonusPoints) {
+        alert('Please enter a valid bet amount!');
+        return;
+      }
+      
+      if (gameInProgress) return;
+      
+      gameInProgress = true;
+      bonusPoints -= betAmount;
+      updateBonusDisplay();
+      
+      // Disable buttons
+      document.getElementById('highBtn').disabled = true;
+      document.getElementById('lowBtn').disabled = true;
+      document.getElementById('betAmount').disabled = true;
+      
+      // Generate random card number (1-100)
+      const cardNumber = Math.floor(Math.random() * 100) + 1;
+      
+      // Animate card reveal
+      const cardDisplay = document.getElementById('cardDisplay');
+      cardDisplay.textContent = '🎴';
+      
+      setTimeout(() => {
+        cardDisplay.textContent = `🎴 ${cardNumber}`;
+        
+        // Determine win/loss
+        let won = false;
+        if (choice === 'high' && cardNumber > 50) won = true;
+        if (choice === 'low' && cardNumber <= 50) won = true;
+        
+        const resultDiv = document.getElementById('gameResult');
+        
+        if (won) {
+          bonusPoints += betAmount * 2; // Double the bet
+          updateBonusDisplay();
+          
+          if (cardNumber > 50) {
+            // Special reward for numbers > 50
+            resultDiv.innerHTML = `
+              <div class="result-message win">
+                🎉 YOU WON! Card was ${cardNumber} (${choice.toUpperCase()})
+                <br>You earned ${betAmount * 2} bonus points!
+                <br><strong>Special Bonus: Number > 50! You can claim a reward!</strong>
+              </div>
+            `;
+            document.getElementById('rewardSection').classList.remove('hidden');
+          } else {
+            resultDiv.innerHTML = `
+              <div class="result-message win">
+                🎉 YOU WON! Card was ${cardNumber} (${choice.toUpperCase()})
+                <br>You earned ${betAmount * 2} bonus points!
+              </div>
+            `;
+          }
+        } else {
+          resultDiv.innerHTML = `
+            <div class="result-message lose">
+              😞 You lost! Card was ${cardNumber} (${choice === 'high' ? 'LOW' : 'HIGH'})
+              <br>You lost ${betAmount} bonus points.
+            </div>
+          `;
+        }
+        
+        document.getElementById('newGameBtn').classList.remove('hidden');
+      }, 1000);
+    }
+
+    function claimReward(rewardType) {
+      alert(`🎉 Congratulations! You've claimed: ${rewardType}\n\nYour reward will be processed shortly. Thank you for playing!`);
+      document.getElementById('rewardSection').classList.add('hidden');
+    }
+
+    function resetGame() {
+      gameInProgress = false;
+      document.getElementById('highBtn').disabled = false;
+      document.getElementById('lowBtn').disabled = false;
+      document.getElementById('betAmount').disabled = false;
+      document.getElementById('betAmount').value = '';
+      document.getElementById('cardDisplay').textContent = 'Place your bet and choose High or Low!';
+      document.getElementById('gameResult').innerHTML = '';
+      document.getElementById('newGameBtn').classList.add('hidden');
+      document.getElementById('rewardSection').classList.add('hidden');
+    }
+
+    // Event Listeners
+    document.getElementById('highBtn').addEventListener('click', () => playHighLow('high'));
+    document.getElementById('lowBtn').addEventListener('click', () => playHighLow('low'));
+    document.getElementById('newGameBtn').addEventListener('click', resetGame);
+    
+    document.getElementById('backBtn').addEventListener('click', () => {
+      window.location.href = 'quiz.html';
+    });
+
+    // Initialize display
+    updateBonusDisplay();
+  </script>
 </body>
 </html>

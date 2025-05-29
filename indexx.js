@@ -1,330 +1,275 @@
-const canvas = document.getElementById("wheel");
-const ctx = canvas.getContext("2d");
+ // Game state
+    let gameState = {
+      coins: parseInt(localStorage.getItem('coins')) || 0,
+      ghsBalance: parseFloat(localStorage.getItem('ghsBalance')) || 0,
+      dailySpins: parseInt(localStorage.getItem('dailySpins')) || 5,
+      lastResetDate: localStorage.getItem('lastResetDate') || new Date().toDateString(),
+      selectedBet: null,
+      isSpinning: false
+    };
 
-const slices = 8;
-const rewards = [0, 2, 5, 10, 0, 2, 5, 10];
-const colors = ["#f44336", "#4caf50", "#2196f3", "#ff9800", "#9c27b0", "#00bcd4", "#8bc34a", "#3f51b5"];
-let spinning = false;
-let currentAngle = 0;
-
-let coins = localStorage.getItem("coins") ? parseInt(localStorage.getItem("coins")) : 0;
-document.getElementById("coinCount").innerText = coins;
-
-let bonusSpins = localStorage.getItem("bonusSpins") ? parseInt(localStorage.getItem("bonusSpins")) : 0;
-
-// Debug mode toggle (set to false in production)
-const DEBUG_MODE = false;
-
-function getToday() {
-  return new Date().toLocaleDateString();
-}
-
-function loadSpinData() {
-  const savedDate = localStorage.getItem("spinDate");
-  const savedSpins = localStorage.getItem("spinCount");
-
-  if (savedDate === getToday()) {
-    return parseInt(savedSpins || "0");
-  } else {
-    localStorage.setItem("spinDate", getToday());
-    localStorage.setItem("spinCount", "0");
-    return 0;
-  }
-}
-
-function updateSpinCount(count) {
-  localStorage.setItem("spinCount", count);
-}
-
-let spinCount = loadSpinData();
-
-function updateSpinDisplay() {
-  const remaining = Math.max(3 - spinCount, 0) + bonusSpins;
-  document.getElementById("spinCountDisplay").innerText = "Spins left: " + remaining;
-}
-
-updateSpinDisplay();
-
-function drawWheel() {
-  const centerX = canvas.width / 2;
-  const centerY = canvas.height / 2;
-  const radius = canvas.width / 2 - 5; // Leave small margin
-  const sliceAngle = (2 * Math.PI) / slices;
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  for (let i = 0; i < slices; i++) {
-    const startAngle = i * sliceAngle;
-    const endAngle = startAngle + sliceAngle;
-
-    // Draw slice
-    ctx.beginPath();
-    ctx.moveTo(centerX, centerY);
-    ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-    ctx.fillStyle = colors[i];
-    ctx.fill();
-    ctx.strokeStyle = "#fff";
-    ctx.lineWidth = 3;
-    ctx.stroke();
-
-    // Draw text
-    ctx.save();
-    ctx.translate(centerX, centerY);
-    ctx.rotate(startAngle + sliceAngle / 2);
-    ctx.textAlign = "right";
-    ctx.fillStyle = "#fff";
-    ctx.font = "bold 16px Arial";
+    // Wheel configuration
+    const wheel = document.getElementById('wheel');
+    const ctx = wheel.getContext('2d');
+    const segments = [];
+    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffa726', '#ab47bc', '#ef5350', '#26a69a'];
     
-    // Display text based on reward value
-    const text = rewards[i] === 0 ? "Try Again" : rewards[i] + " coins";
-    ctx.fillText(text, radius - 25, 5);
-    ctx.restore();
-  }
-}
+    // Create 100 segments (1-100)
+    for (let i = 1; i <= 100; i++) {
+      segments.push({
+        number: i,
+        color: colors[i % colors.length]
+      });
+    }
 
-drawWheel();
+    let currentRotation = 0;
 
-const spinBtn = document.getElementById('spinBtn');
+    function checkDailyReset() {
+      const today = new Date().toDateString();
+      if (gameState.lastResetDate !== today) {
+        gameState.dailySpins = 5;
+        gameState.lastResetDate = today;
+        saveGameState();
+      }
+    }
 
-function debugLog(message) {
-  if (DEBUG_MODE) {
-    console.log(message);
-    const debugInfo = document.getElementById('debugInfo');
-    debugInfo.style.display = 'block';
-    debugInfo.innerHTML += message + '<br>';
-  }
-}
+    function saveGameState() {
+      localStorage.setItem('coins', gameState.coins);
+      localStorage.setItem('ghsBalance', gameState.ghsBalance.toFixed(2));
+      localStorage.setItem('dailySpins', gameState.dailySpins);
+      localStorage.setItem('lastResetDate', gameState.lastResetDate);
+    }
 
-function spin() {
-  if (spinning) return;
-  if (spinCount >= 3 && bonusSpins <= 0) {
-    alert("❌ You've used all your spins for today. Watch an ad or buy spins.");
-    return;
-  }
-
-  spinning = true;
-  spinBtn.disabled = true;
-  
-  // Clear debug info
-  if (DEBUG_MODE) {
-    document.getElementById('debugInfo').innerHTML = '';
-  }
-  
-  // Generate random spin amount - more spins for better effect
-  const minSpins = 5; // Minimum 5 full rotations
-  const maxSpins = 8; // Maximum 8 full rotations
-  const fullRotations = (Math.random() * (maxSpins - minSpins) + minSpins) * 360;
-  const extraDegrees = Math.random() * 360; // Random position within a rotation
-  const totalSpin = fullRotations + extraDegrees;
-  
-  debugLog(`Starting spin: ${totalSpin} degrees`);
-  
-  const finalAngle = currentAngle + totalSpin;
-  const start = Date.now();
-  const spinTime = 4000;
-
-  function animate() {
-    const now = Date.now();
-    const elapsed = now - start;
-    const progress = Math.min(elapsed / spinTime, 1);
-    
-    // Ease out cubic for smooth deceleration
-    const eased = 1 - Math.pow(1 - progress, 3);
-    const currentRotation = currentAngle + (totalSpin * eased);
-    
-    canvas.style.transform = `rotate(${currentRotation}deg)`;
-
-    if (progress < 1) {
-      requestAnimationFrame(animate);
-    } else {
-      // Animation complete - calculate winner
-      currentAngle = finalAngle;
+    function updateDisplay() {
+      document.getElementById('coinCount').textContent = gameState.coins;
+      document.getElementById('ghsBalance').textContent = gameState.ghsBalance.toFixed(2);
+      document.getElementById('spinCountDisplay').textContent = `${gameState.dailySpins}/5`;
       
-      // Calculate which slice the pointer is pointing to
-      // The pointer is at the top (12 o'clock position)
-      // We need to account for the wheel's rotation
-      const normalizedAngle = (360 - (finalAngle % 360)) % 360;
-      const sliceAngle = 360 / slices;
-      
-      // Calculate which slice index (0-7) the pointer is in
-      // Add half slice angle to center the detection
-      const adjustedAngle = (normalizedAngle + (sliceAngle / 2)) % 360;
-      const sliceIndex = Math.floor(adjustedAngle / sliceAngle);
-      
-      debugLog(`Final angle: ${finalAngle}`);
-      debugLog(`Normalized angle: ${normalizedAngle}`);
-      debugLog(`Adjusted angle: ${adjustedAngle}`);
-      debugLog(`Slice angle: ${sliceAngle}`);
-      debugLog(`Calculated slice index: ${sliceIndex}`);
-      debugLog(`Slice color: ${colors[sliceIndex]}`);
-      debugLog(`Slice reward: ${rewards[sliceIndex]}`);
-      
-      const reward = rewards[sliceIndex];
+      // Update button states
+      document.getElementById('spinBtn').disabled = gameState.dailySpins <= 0 || gameState.isSpinning;
+      document.getElementById('redeemBtn').disabled = gameState.coins < 1000;
+      document.getElementById('watchAdBtn').disabled = gameState.dailySpins >= 5;
+    }
 
-      // Update coins
-      coins += reward;
-      localStorage.setItem("coins", coins);
-      document.getElementById("coinCount").innerText = coins;
+    function drawWheel() {
+      const centerX = wheel.width / 2;
+      const centerY = wheel.height / 2;
+      const radius = 150;
+      const anglePerSegment = (2 * Math.PI) / segments.length;
+
+      ctx.clearRect(0, 0, wheel.width, wheel.height);
+
+      segments.forEach((segment, index) => {
+        const startAngle = index * anglePerSegment;
+        const endAngle = startAngle + anglePerSegment;
+
+        // Draw segment
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.closePath();
+        ctx.fillStyle = segment.color;
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Draw number (only for visible segments)
+        if (index % 5 === 0) {
+          const textAngle = startAngle + anglePerSegment / 2;
+          const textX = centerX + Math.cos(textAngle) * (radius * 0.7);
+          const textY = centerY + Math.sin(textAngle) * (radius * 0.7);
+          
+          ctx.save();
+          ctx.translate(textX, textY);
+          ctx.rotate(textAngle + Math.PI / 2);
+          ctx.fillStyle = 'white';
+          ctx.font = 'bold 12px Arial';
+          ctx.textAlign = 'center';
+          ctx.fillText(segment.number.toString(), 0, 0);
+          ctx.restore();
+        }
+      });
+
+      // Draw center circle
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, 20, 0, 2 * Math.PI);
+      ctx.fillStyle = '#333';
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    }
+
+    function selectBet(type) {
+      gameState.selectedBet = type;
+      document.querySelectorAll('.bet-option').forEach(btn => btn.classList.remove('selected'));
+      document.getElementById(type + 'Bet').classList.add('selected');
+    }
+
+    function spin() {
+      if (gameState.dailySpins <= 0 || gameState.isSpinning) return;
+
+      const betAmount = parseInt(document.getElementById('betAmount').value) || 0;
       
-      // Show result
-      if (reward > 0) {
-        alert("🎉 You won " + reward + " coins!");
-      } else {
-        alert("😔 Try again! Better luck next time.");
+      // Check if user wants to bet (optional)
+      if (betAmount > 0) {
+        if (betAmount > gameState.coins) {
+          showMessage('spinResult', 'Not enough coins to place this bet!', 'error');
+          return;
+        }
+        
+        if (!gameState.selectedBet) {
+          showMessage('spinResult', 'Please select HIGH or LOW bet first!', 'error');
+          return;
+        }
+        
+        gameState.coins -= betAmount;
       }
 
-      // Update spin count
-      if (spinCount < 3) {
-        spinCount++;
-        updateSpinCount(spinCount);
-      } else {
-        bonusSpins--;
-        localStorage.setItem("bonusSpins", bonusSpins);
+      gameState.isSpinning = true;
+      gameState.dailySpins--;
+      
+      const spinResult = Math.floor(Math.random() * 100) + 1;
+      const rotations = 5 + Math.random() * 5;
+      const finalAngle = (spinResult - 1) * (360 / 100);
+      const totalRotation = rotations * 360 + finalAngle;
+      
+      currentRotation += totalRotation;
+      wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+      setTimeout(() => {
+        gameState.isSpinning = false;
+        
+        // Always give base reward for daily spins
+        const baseReward = Math.floor(Math.random() * 20) + 5; // 5-25 coins
+        let totalWin = baseReward;
+        let message = `🎉 Landed on ${spinResult}! Base reward: +${baseReward} coins`;
+        
+        // Check betting if user placed a bet
+        if (betAmount > 0 && gameState.selectedBet) {
+          const isHigh = spinResult > 50;
+          const userBetHigh = gameState.selectedBet === 'high';
+          const won = (isHigh && userBetHigh) || (!isHigh && !userBetHigh);
+          
+          if (won) {
+            const winAmount = Math.floor(betAmount * 1.8); // 80% profit
+            totalWin += winAmount;
+            message = `🎉 Bet WON! Landed on ${spinResult}. Base: +${baseReward}, Bet win: +${winAmount} coins!`;
+          } else {
+            message = `😔 Bet lost! Landed on ${spinResult}. Base reward: +${baseReward} coins`;
+          }
+        }
+        
+        gameState.coins += totalWin;
+        showMessage('spinResult', message, totalWin > baseReward ? 'success' : 'info');
+        
+        saveGameState();
+        updateDisplay();
+      }, 3000);
+
+      updateDisplay();
+    }
+
+    function watchAd() {
+      // Simulate ad watching
+      showMessage('adMessage', 'Loading ad...', 'info');
+      
+      setTimeout(() => {
+        gameState.dailySpins += 2;
+        if (gameState.dailySpins > 5) gameState.dailySpins = 5;
+        
+        showMessage('adMessage', '🎉 Ad watched! +2 spins added!', 'success');
+        saveGameState();
+        updateDisplay();
+        
+        setTimeout(() => {
+          document.getElementById('adMessage').textContent = '';
+          document.getElementById('adMessage').className = 'message';
+        }, 3000);
+      }, 2000);
+    }
+
+    function buySpins() {
+      if (gameState.ghsBalance < 2) {
+        showMessage('purchaseMessage', 'Insufficient GHS balance!', 'error');
+        return;
       }
-
-      updateSpinDisplay();
-      spinning = false;
-      spinBtn.disabled = false;
+      
+      gameState.ghsBalance -= 2;
+      gameState.dailySpins += 5;
+      if (gameState.dailySpins > 5) gameState.dailySpins = 5;
+      
+      showMessage('purchaseMessage', '🎉 5 spins purchased! -2 GHS', 'success');
+      saveGameState();
+      updateDisplay();
+      
+      setTimeout(() => {
+        document.getElementById('purchaseMessage').textContent = '';
+        document.getElementById('purchaseMessage').className = 'message';
+      }, 3000);
     }
-  }
-  
-  animate();
-}
 
-/* --- PAYSTACK PAYMENT --- */
-
-function buyCoins() {
-  if (spinning) return;
-  const purchaseMessage = document.getElementById("purchaseMessage");
-  purchaseMessage.textContent = "";
-
-  // Get user email dynamically (prompt for demo)
-  let email = prompt("Please enter your email for payment receipt:");
-  if (!email || !email.includes("@")) {
-    purchaseMessage.textContent = "❌ Valid email is required to proceed.";
-    purchaseMessage.className = "message error";
-    return;
-  }
-
-  var handler = PaystackPop.setup({
-    key: 'YOUR_PAYSTACK_PUBLIC_KEY', // Replace with your Paystack public key
-    email: email,
-    amount: 9900, // 0.99 GHS in kobo/pesewas (smallest currency unit)
-    currency: 'GHS',
-    callback: function(response) {
-      // Successful payment callback
-      coins += 50;
-      bonusSpins += 3;
-      localStorage.setItem("coins", coins);
-      localStorage.setItem("bonusSpins", bonusSpins);
-      document.getElementById("coinCount").innerText = coins;
-      updateSpinDisplay();
-
-      purchaseMessage.textContent = "✅ Payment successful! You received 50 coins and 3 spins.";
-      purchaseMessage.className = "message success";
-      setTimeout(() => { purchaseMessage.textContent = ""; }, 6000);
-    },
-    onClose: function() {
-      purchaseMessage.textContent = "❌ Payment was cancelled.";
-      purchaseMessage.className = "message error";
-      setTimeout(() => { purchaseMessage.textContent = ""; }, 4000);
+    function redeemCoins() {
+      if (gameState.coins < 1000) {
+        showMessage('walletMessage', 'Need 1000 coins to redeem!', 'error');
+        return;
+      }
+      
+      gameState.coins -= 1000;
+      gameState.ghsBalance += 40;
+      
+      showMessage('walletMessage', '🎉 Redeemed 1000 coins for 40 GHS!', 'success');
+      saveGameState();
+      updateDisplay();
+      
+      setTimeout(() => {
+        document.getElementById('walletMessage').textContent = '';
+        document.getElementById('walletMessage').className = 'message';
+      }, 3000);
     }
-  });
-  handler.openIframe();
-}
 
-/* --- GOOGLE ADSENSE REWARDED ADS --- */
+    function depositGHS() {
+      const amount = parseFloat(document.getElementById('depositAmount').value);
+      
+      if (!amount || amount <= 0) {
+        showMessage('walletMessage', 'Please enter a valid amount!', 'error');
+        return;
+      }
+      
+      // Simulate payment processing
+      showMessage('walletMessage', 'Processing payment...', 'info');
+      
+      setTimeout(() => {
+        gameState.ghsBalance += amount;
+        document.getElementById('depositAmount').value = '';
+        
+        showMessage('walletMessage', `🎉 Successfully deposited ${amount.toFixed(2)} GHS!`, 'success');
+        saveGameState();
+        updateDisplay();
+        
+        setTimeout(() => {
+          document.getElementById('walletMessage').textContent = '';
+          document.getElementById('walletMessage').className = 'message';
+        }, 3000);
+      }, 2000);
+    }
 
-// Replace this with your actual AdSense rewarded ad client and slot IDs:
-const adsenseRewardedAdClient = "ca-pub-XXXXXXXXXXXXXXXX"; // Your AdSense publisher ID
-const adsenseRewardedAdSlot = "1234567890"; // Your Rewarded Ad Unit ID
+    function showMessage(elementId, message, type) {
+      const element = document.getElementById(elementId);
+      element.textContent = message;
+      element.className = `message ${type}`;
+    }
 
-// Enable button only after Ads script loads
-window.onload = function() {
-  if (typeof window.adsbygoogle !== "undefined") {
-    document.getElementById("watchAdBtn").disabled = false;
-  }
-};
+    // Initialize game
+    function init() {
+      checkDailyReset();
+      drawWheel();
+      updateDisplay();
+      
+      // Auto-select high bet by default
+      selectBet('high');
+    }
 
-// Rewarded ad instance holder
-let rewardedAd;
-
-// Load the rewarded ad
-function loadRewardedAd() {
-  rewardedAd = new window.adsbygoogle.RewardedAd({
-    adClient: adsenseRewardedAdClient,
-    adSlot: adsenseRewardedAdSlot,
-  });
-
-  rewardedAd.load().then(() => {
-    console.log("Rewarded ad loaded");
-  }).catch((err) => {
-    console.error("Rewarded ad failed to load:", err);
-    document.getElementById("adMessage").textContent = "⚠️ Ads not available now.";
-  });
-}
-
-loadRewardedAd();
-
-function watchAd() {
-  if (!rewardedAd) {
-    document.getElementById("adMessage").textContent = "⚠️ Ad not loaded yet. Try again shortly.";
-    return;
-  }
-  const adMessage = document.getElementById("adMessage");
-  adMessage.textContent = "Playing ad...";
-
-  rewardedAd.show().then(() => {
-    // User watched ad fully, reward them
-    coins += 5;
-    bonusSpins++;
-    localStorage.setItem("coins", coins);
-    localStorage.setItem("bonusSpins", bonusSpins);
-    document.getElementById("coinCount").innerText = coins;
-    updateSpinDisplay();
-    adMessage.textContent = "✅ Thanks for watching! You earned 5 coins and 1 spin.";
-
-    // Reload ad for next watch
-    loadRewardedAd();
-
-    setTimeout(() => {
-      adMessage.textContent = "";
-    }, 6000);
-  }).catch((err) => {
-    console.error("Ad failed or skipped:", err);
-    adMessage.textContent = "❌ Ad not completed. No reward given.";
-    setTimeout(() => { adMessage.textContent = ""; }, 4000);
-  });
-}
-
-/* --- REDEEM --- */
-
-// function redeem() {
-//   const phoneInput = document.getElementById("phoneInput");
-//   const phone = phoneInput.value.trim();
-//   const redeemMessage = document.getElementById("redeemMessage");
-//   const phonePattern = /^[0-9]{8,15}$/;
-
-//   if (!phone) {
-//     redeemMessage.textContent = "❌ Please enter your phone number.";
-//     redeemMessage.className = "message error";
-//     return;
-//   }
-//   if (!phonePattern.test(phone)) {
-//     redeemMessage.textContent = "❌ Invalid phone number format.";
-//     redeemMessage.className = "message error";
-//     return;
-//   }
-//   if (coins < 100) {
-//     redeemMessage.textContent = "❌ Not enough coins to redeem.";
-//     redeemMessage.className = "message error";
-//     return;
-//   }
-
-//   coins -= 100;
-//   localStorage.setItem("coins", coins);
-//   document.getElementById("coinCount").innerText = coins;
-//   redeemMessage.textContent = `✅ Redemption successful! We will contact you on ${phone}.`;
-//   redeemMessage.className = "message success";
-//   phoneInput.value = "";
-// }
+    // Start the game
+    init();

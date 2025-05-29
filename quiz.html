@@ -4,42 +4,1032 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Daily Quiz Game</title>
-  <link rel="stylesheet" href="quiz.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px 0;
+      backdrop-filter: blur(10px);
+    }
+
+    header ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    header a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      transition: background 0.3s;
+    }
+
+    header a:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .header {
+      text-align: center;
+      padding: 30px 20px;
+      color: white;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    #user-info {
+      font-size: 1.2em;
+      margin: 10px 0;
+    }
+
+    #login-area, #quiz-area {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    #login-area {
+      text-align: center;
+      max-width: 400px;
+    }
+
+    #login-area h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      background: #4ecdc4;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin: 10px 5px;
+    }
+
+    button:hover {
+      background: #45b7b8;
+      transform: translateY(-2px);
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .question-area {
+      margin-bottom: 30px;
+    }
+
+    #question-text {
+      font-size: 1.3em;
+      font-weight: bold;
+      margin-bottom: 20px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      border-left: 5px solid #4ecdc4;
+    }
+
+    #options-container {
+      display: grid;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .option {
+      padding: 15px;
+      background: #f8f9fa;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 16px;
+    }
+
+    .option:hover {
+      background: #e9ecef;
+      border-color: #4ecdc4;
+    }
+
+    .option.selected {
+      background: #4ecdc4;
+      color: white;
+      border-color: #45b7b8;
+    }
+
+    .option.correct {
+      background: #28a745;
+      color: white;
+      border-color: #1e7e34;
+    }
+
+    .option.incorrect {
+      background: #dc3545;
+      color: white;
+      border-color: #c82333;
+    }
+
+    #timer {
+      background: #ff6b6b;
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+
+    #timer.warning {
+      background: #ff4757;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+
+    #score-display {
+      background: #17a2b8;
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+
+    #result-message {
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .correct-message {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .incorrect-message {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .quiz-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .stat-card {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      border: 2px solid #ddd;
+    }
+
+    .stat-number {
+      font-size: 2em;
+      font-weight: bold;
+      color: #4ecdc4;
+    }
+
+    .stat-label {
+      font-size: 0.9em;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .reward-section {
+      background: linear-gradient(45deg, #00b894, #00cec9);
+      color: white;
+      padding: 25px;
+      border-radius: 15px;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .reward-section h3 {
+      margin-bottom: 15px;
+      font-size: 1.5em;
+    }
+
+    .reward-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+
+    .reward-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid white;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+
+    .reward-btn:hover {
+      background: white;
+      color: #00b894;
+    }
+
+    .progress-bar {
+      background: #e9ecef;
+      height: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+
+    .progress-fill {
+      background: linear-gradient(90deg, #4ecdc4, #45b7b8);
+      height: 100%;
+      border-radius: 10px;
+      transition: width 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+  
+    footer {
+    background-color: #222;
+    color: #eee;
+    padding: 30px 20px 15px;
+    margin-top: auto;
+    font-size: 0.9rem;
+  }
+  
+  footer .x {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto 20px;
+    gap: 30px;
+  }
+  
+  footer .x > div {
+    flex: 1 1 160px;
+    min-width: 160px;
+  }
+  
+  footer .x p {
+    margin-bottom: 10px;
+  }
+  
+  footer .x p strong {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    color: #1abc9c;
+  }
+  
+  footer .x a {
+    color: #1abc9c;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  footer .x a:hover {
+    color: #16a085;
+  }
+  
+  footer .vi {
+    text-align: center;
+    border-top: 1px solid #444;
+    padding-top: 12px;
+    font-size: 0.85rem;
+    color: #aaa;
+  }
+    @media (max-width: 600px) {
+      .header h1 {
+        font-size: 2em;
+      }
+      
+      header ul {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .reward-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .reward-btn {
+        width: 200px;
+      }
+    
+  footer .x {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  footer .x > div {
+    min-width: auto;
+  }
+  header ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  header a {
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    padding: 12px;
+  }
+
+  }
+  </style>
 </head>
 <body>
 
   <header>
     <ul>
       <li><a href="spin.html">Spin & Win</a></li>
-      <li><a href="quiz.html">Spin & Win</a></li>
-      <li><a href="scratch.html">Spin & Win</a></li>
+      <li><a href="quiz.html">Quiz Game</a></li>
+      <li><a href="scratch.html">Scratch Card</a></li>
+      <li><a href="home.html">Home</a></li>
     </ul>
   </header>
   
   <div class="header">
-    <h1>Daily Quiz Game</h1>
-    <div id="user-info"></div>
-    <button id="logout-btn" style="display:none;">Logout</button>
+    <h1>🧠 Daily Quiz Challenge</h1>
   </div>
-
-  <div id="login-area">
-    <h2>Login</h2>
-    <input type="text" id="user-input" placeholder="Enter username or email" />
-    <button id="login-btn">Login</button>
-  </div>
-
-  <div id="quiz-area" style="display:none;">
+  <div id="quiz-area">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width: 0%;">0/50</div>
+    </div>
+    
     <div class="question-area">
       <div id="question-text"></div>
       <div id="options-container"></div>
     </div>
-    <div id="timer">Time Left: <span id="time-remaining">15</span>s</div>
+    
+    <div id="timer">Time Left: <span id="time-remaining">30</span>s</div>
     <button id="next-btn" disabled>Next Question</button>
     <div id="result-message"></div>
-    <div id="score-display">Score: 0</div>
-    <button id="restart-btn" style="display:none;">Restart Quiz</button>
+    
+    <div class="quiz-stats">
+      <div class="stat-card">
+        <div class="stat-number" id="current-question">1</div>
+        <div class="stat-label">Question</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="score-display">0</div>
+        <div class="stat-label">Score</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="correct-count">0</div>
+        <div class="stat-label">Correct</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="percentage">0%</div>
+        <div class="stat-label">Accuracy</div>
+      </div>
+    </div>
+
+    <div id="quiz-complete" style="display:none;">
+      <div class="quiz-stats">
+        <div class="stat-card">
+          <div class="stat-number" id="final-score">0</div>
+          <div class="stat-label">Final Score</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="final-percentage">0%</div>
+          <div class="stat-label">Final Percentage</div>
+        </div>
+      </div>
+      
+      <div id="reward-section" style="display:none;" class="reward-section">
+        <h3>🎉 Congratulations! You Qualify for Rewards!</h3>
+        <p>You scored above 35%! Choose your reward:</p>
+        <div class="reward-buttons">
+          <button class="reward-btn" onclick="claimReward('2GHS Airtime')">📱 2GHS Airtime</button>
+          <button class="reward-btn" onclick="claimReward('Data Bundle')">📊 Data Bundle</button>
+          <button class="reward-btn" onclick="claimReward('Mashup')">🎵 Mashup</button>
+        </div>
+      </div>
+      
+      <button id="restart-btn">🔄 Take Quiz Again</button>
+    </div>
   </div>
 
-  <script src="quiz.js"></script>
+  <footer>
+      <div class="x">
+        <div class="I">
+          <p><strong>SPIN <br></strong>& WIN</p>
+        </div>
+
+        <div class="ii">
+          <p><strong>company</strong></p><br>
+          <p><a href="blog.html">Blog</a></p>
+          <p><a href="privacy.html">Privacy and Policy</a></p>
+          <p>FAQ'S</p><br>
+          <p><a href="contact.html">Contact Us</a></p>
+        </div>
+
+        <div class="iii">
+           <p><strong>Contact Us</strong></p><br> 
+           <p>twotimes678@gmail.com</p><br>
+           <p>Takoradi, Axim "GHANA"</p><br>
+           <p><a href="https://wa.me/+233530728551?text">Call or WhatsApp</a></p>
+        </div>
+
+        <div class="iv">
+          <p><strong>Quick Link</strong></p><br>
+          <p><a href="home.html">Home</a></p><br>
+          <p><a href="about.html">About Us</a></p><br>
+          <p><a href="contact.html">Contact Us</a></p><br>
+        </div>
+
+        <div class="vv">
+          <p><strong>Social Share</strong></p><br>
+          <p><a href="https://wa.me/+233530728551?text">WhatsApp</a></p><br>
+          <p>Facebook</p><br>
+          <p>Instagram</p><br>
+          <p>LinkedIn</p>
+        </div>
+      </div>
+
+      <div class="vi"><p>Copyright &copy; 2024 | Powered by <strong>TIMES TWO</strong></p></div>
+  </footer>
+
+  <script>
+    // Quiz questions covering Ghana, Tech, Math, and Science
+    const questions = [
+      // Ghana Questions (12)
+      {
+        question: "What is the name of Ghana's first president who led the country to independence?",
+        options: ["Kwame Nkrumah", "John Mahama", "Jerry Rawlings", "Kofi Busia"],
+        correct: 0,
+        category: "Ghana"
+      },
+      {
+        question: "Which Ghanaian city is known as the 'Garden City of West Africa'?",
+        options: ["Accra", "Kumasi", "Tamale", "Cape Coast"],
+        correct: 1,
+        category: "Ghana"
+      },
+      {
+        question: "What is the traditional cloth of Ghana called?",
+        options: ["Dashiki", "Kente", "Boubou", "Agbada"],
+        correct: 1,
+        category: "Ghana"
+      },
+      {
+        question: "Ghana's parliament is located in which city?",
+        options: ["Kumasi", "Tamale", "Accra", "Sekondi-Takoradi"],
+        correct: 2,
+        category: "Ghana"
+      },
+      {
+        question: "What is the largest ethnic group in Ghana?",
+        options: ["Ewe", "Ga", "Akan", "Dagomba"],
+        correct: 2,
+        category: "Ghana"
+      },
+      {
+        question: "Which lake in Ghana is one of the largest artificial lakes in the world?",
+        options: ["Lake Bosumtwi", "Lake Volta", "Lake Tano", "Lake Bia"],
+        correct: 1,
+        category: "Ghana"
+      },
+      {
+        question: "What is Ghana's main export crop?",
+        options: ["Coffee", "Cocoa", "Cotton", "Cashew"],
+        correct: 1,
+        category: "Ghana"
+      },
+      {
+        question: "Which Ghanaian footballer won the Ballon d'Or in 1995?",
+        options: ["Abedi Pele", "George Weah", "Tony Yeboah", "Asamoah Gyan"],
+        correct: 1,
+        category: "Ghana"
+      },
+      {
+        question: "What is the name of Ghana's national theatre located in Accra?",
+        options: ["National Theatre of Ghana", "Golden Jubilee House", "Accra International Conference Centre", "Ghana Academy of Arts and Sciences"],
+        correct: 0,
+        category: "Ghana"
+      },
+      {
+        question: "Which university is the oldest in Ghana?",
+        options: ["KNUST", "University of Ghana", "UCC", "UDS"],
+        correct: 1,
+        category: "Ghana"
+      },
+      {
+        question: "What does the red color in Ghana's flag represent?",
+        options: ["Peace", "Blood of heroes", "Natural resources", "Agriculture"],
+        correct: 1,
+        category: "Ghana"
+      },
+      {
+        question: "Which Ghanaian queen mother is famous for leading resistance against British colonial rule?",
+        options: ["Yaa Asantewaa", "Nana Akoto Bamfo", "Nana Afia Kobi", "Nana Konadu Yaadom"],
+        correct: 0,
+        category: "Ghana"
+      },
+
+      // Technology Questions (13)
+      {
+        question: "What does 'HTTP' stand for?",
+        options: ["HyperText Transfer Protocol", "High Tech Transfer Process", "Home Tool Transfer Protocol", "HyperText Translation Protocol"],
+        correct: 0,
+        category: "Tech"
+      },
+      {
+        question: "Which programming language is primarily used for iOS app development?",
+        options: ["Java", "Python", "Swift", "C++"],
+        correct: 2,
+        category: "Tech"
+      },
+      {
+        question: "What is the maximum storage capacity of a Blu-ray disc?",
+        options: ["25 GB", "50 GB", "100 GB", "128 GB"],
+        correct: 1,
+        category: "Tech"
+      },
+      {
+        question: "Which company developed the first commercial microprocessor?",
+        options: ["IBM", "Intel", "AMD", "Motorola"],
+        correct: 1,
+        category: "Tech"
+      },
+      {
+        question: "What does 'SQL' stand for in database management?",
+        options: ["Structured Query Language", "Simple Query Language", "Standard Query Language", "Sequential Query Language"],
+        correct: 0,
+        category: "Tech"
+      },
+      {
+        question: "Which port is commonly used for HTTPS connections?",
+        options: ["80", "443", "21", "25"],
+        correct: 1,
+        category: "Tech"
+      },
+      {
+        question: "What is the binary representation of the decimal number 15?",
+        options: ["1010", "1111", "1100", "1001"],
+        correct: 1,
+        category: "Tech"
+      },
+      {
+        question: "Which algorithm is commonly used for data encryption?",
+        options: ["AES", "HTML", "CSS", "XML"],
+        correct: 0,
+        category: "Tech"
+      },
+      {
+        question: "What does 'RAM' stand for?",
+        options: ["Read Access Memory", "Random Access Memory", "Rapid Access Memory", "Real Access Memory"],
+        correct: 1,
+        category: "Tech"
+      },
+      {
+        question: "Which version control system was created by Linus Torvalds?",
+        options: ["SVN", "Git", "Mercurial", "CVS"],
+        correct: 1,
+        category: "Tech"
+      },
+      {
+        question: "What is the time complexity of binary search?",
+        options: ["O(n)", "O(log n)", "O(n²)", "O(1)"],
+        correct: 1,
+        category: "Tech"
+      },
+      {
+        question: "Which protocol is used for sending email?",
+        options: ["HTTP", "FTP", "SMTP", "SNMP"],
+        correct: 2,
+        category: "Tech"
+      },
+      {
+        question: "What does 'API' stand for?",
+        options: ["Application Programming Interface", "Advanced Programming Interface", "Application Process Interface", "Automated Programming Interface"],
+        correct: 0,
+        category: "Tech"
+      },
+
+      // Mathematics Questions (13)
+      {
+        question: "What is the derivative of sin(x)?",
+        options: ["cos(x)", "-cos(x)", "sin(x)", "-sin(x)"],
+        correct: 0,
+        category: "Math"
+      },
+      {
+        question: "If log₂(x) = 5, what is the value of x?",
+        options: ["10", "25", "32", "125"],
+        correct: 2,
+        category: "Math"
+      },
+      {
+        question: "What is the sum of the first 10 prime numbers?",
+        options: ["126", "129", "132", "135"],
+        correct: 1,
+        category: "Math"
+      },
+      {
+        question: "In a normal distribution, what percentage of data falls within 2 standard deviations of the mean?",
+        options: ["68%", "95%", "99.7%", "90%"],
+        correct: 1,
+        category: "Math"
+      },
+      {
+        question: "What is the solution to the equation 2x² - 8x + 6 = 0?",
+        options: ["x = 1, 3", "x = 2, 4", "x = 1, 2", "x = 3, 4"],
+        correct: 0,
+        category: "Math"
+      },
+      {
+        question: "What is the limit of (1 + 1/n)ⁿ as n approaches infinity?",
+        options: ["1", "e", "π", "∞"],
+        correct: 1,
+        category: "Math"
+      },
+      {
+        question: "If a triangle has sides of length 3, 4, and 5, what type of triangle is it?",
+        options: ["Equilateral", "Isosceles", "Right", "Scalene"],
+        correct: 2,
+        category: "Math"
+      },
+      {
+        question: "What is the determinant of the matrix [[2, 3], [1, 4]]?",
+        options: ["5", "8", "11", "14"],
+        correct: 0,
+        category: "Math"
+      },
+      {
+        question: "In how many ways can 5 people be arranged in a circle?",
+        options: ["24", "60", "120", "240"],
+        correct: 0,
+        category: "Math"
+      },
+      {
+        question: "What is the value of ∫(2x + 3)dx from 0 to 2?",
+        options: ["8", "10", "12", "14"],
+        correct: 1,
+        category: "Math"
+      },
+      {
+        question: "If P(A) = 0.3 and P(B) = 0.4, and A and B are independent, what is P(A ∩ B)?",
+        options: ["0.12", "0.7", "0.1", "0.34"],
+        correct: 0,
+        category: "Math"
+      },
+      {
+        question: "What is the coefficient of x³ in the expansion of (x + 2)⁵?",
+        options: ["40", "80", "160", "32"],
+        correct: 0,
+        category: "Math"
+      },
+      {
+        question: "What is the surface area of a sphere with radius 3?",
+        options: ["36π", "27π", "18π", "9π"],
+        correct: 0,
+        category: "Math"
+      },
+
+      // Science Questions (12)
+      {
+        question: "What is the chemical formula for glucose?",
+        options: ["C₆H₁₂O₆", "C₅H₁₀O₅", "C₁₂H₂₂O₁₁", "C₃H₆O₃"],
+        correct: 0,
+        category: "Science"
+      },
+      {
+        question: "Which organelle is responsible for photosynthesis in plant cells?",
+        options: ["Mitochondria", "Nucleus", "Chloroplast", "Ribosome"],
+        correct: 2,
+        category: "Science"
+      },
+      {
+        question: "What is the speed of light in a vacuum?",
+        options: ["3 × 10⁸ m/s", "3 × 10⁶ m/s", "3 × 10¹⁰ m/s", "3 × 10⁹ m/s"],
+        correct: 0,
+        category: "Science"
+      },
+      {
+        question: "Which element has the atomic number 79?",
+        options: ["Silver", "Gold", "Platinum", "Mercury"],
+        correct: 1,
+        category: "Science"
+      },
+      {
+        question: "What type of bond holds the two strands of DNA together?",
+        options: ["Ionic bonds", "Covalent bonds", "Hydrogen bonds", "Metallic bonds"],
+        correct: 2,
+        category: "Science"
+      },
+      {
+        question: "What is the powerhouse of the cell?",
+        options: ["Nucleus", "Mitochondria", "Endoplasmic reticulum", "Golgi apparatus"],
+        correct: 1,
+        category: "Science"
+      },
+      {
+        question: "Which gas makes up approximately 78% of Earth's atmosphere?",
+        options: ["Oxygen", "Carbon dioxide", "Nitrogen", "Argon"],
+        correct: 2,
+        category: "Science"
+      },
+      {
+        question: "What is the SI unit for electric current?",
+        options: ["Volt", "Ohm", "Ampere", "Watt"],
+        correct: 2,
+        category: "Science"
+      },
+      {
+        question: "Which scientist proposed the theory of evolution by natural selection?",
+        options: ["Gregor Mendel", "Charles Darwin", "Louis Pasteur", "Alexander Fleming"],
+        correct: 1,
+        category: "Science"
+      },
+      {
+        question: "What is the most abundant protein in the human body?",
+        options: ["Keratin", "Hemoglobin", "Collagen", "Insulin"],
+        correct: 2,
+        category: "Science"
+      },
+      {
+        question: "Which planet has the strongest gravitational force?",
+        options: ["Earth", "Jupiter", "Saturn", "Neptune"],
+        correct: 1,
+        category: "Science"
+      },
+      {
+        question: "What is the pH value of pure water at 25°C?",
+        options: ["6", "7", "8", "9"],
+        correct: 1,
+        category: "Science"
+      }
+    ];
+
+  let currentQuestionIndex = 0;
+  let score = 0;
+  let correctAnswers = 0;
+  let timer;
+  let timeLeft = 30;
+  let selectedAnswer = null;
+  let questionAnswered = false;
+
+  function shuffleQuestions() {
+    for (let i = questions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [questions[i], questions[j]] = [questions[j], questions[i]];
+    }
+  }
+
+  function startQuiz() {
+    shuffleQuestions();
+    currentQuestionIndex = 0;
+    score = 0;
+    correctAnswers = 0;
+    showQuestion();
+    updateStats();
+  }
+
+  function showQuestion() {
+    if (currentQuestionIndex >= questions.length) {
+      endQuiz();
+      return;
+    }
+
+    const question = questions[currentQuestionIndex];
+    document.getElementById('question-text').textContent = `${currentQuestionIndex + 1}. ${question.question}`;
+    
+    const optionsContainer = document.getElementById('options-container');
+    optionsContainer.innerHTML = '';
+    
+    question.options.forEach((option, index) => {
+      const optionDiv = document.createElement('div');
+      optionDiv.className = 'option';
+      optionDiv.textContent = option;
+      optionDiv.onclick = () => selectAnswer(index);
+      optionsContainer.appendChild(optionDiv);
+    });
+
+    timeLeft = 30;
+    selectedAnswer = null;
+    questionAnswered = false;
+    document.getElementById('next-btn').disabled = true;
+    document.getElementById('result-message').innerHTML = '';
+    
+    updateProgress();
+    startTimer();
+  }
+
+  function selectAnswer(answerIndex) {
+    if (questionAnswered) return;
+    
+    const options = document.querySelectorAll('.option');
+    options.forEach(option => option.classList.remove('selected'));
+    options[answerIndex].classList.add('selected');
+    
+    selectedAnswer = answerIndex;
+    document.getElementById('next-btn').disabled = false;
+  }
+
+  function submitAnswer() {
+    if (selectedAnswer === null || questionAnswered) return;
+    
+    questionAnswered = true;
+    clearInterval(timer);
+    
+    const question = questions[currentQuestionIndex];
+    const options = document.querySelectorAll('.option');
+    
+    options.forEach((option, index) => {
+      if (index === question.correct) {
+        option.classList.add('correct');
+      } else if (index === selectedAnswer && index !== question.correct) {
+        option.classList.add('incorrect');
+      }
+    });
+    
+    if (selectedAnswer === question.correct) {
+      score += 2;
+      correctAnswers++;
+      document.getElementById('result-message').innerHTML = 
+        '<div class="correct-message">✅ Correct! Well done!</div>';
+    } else {
+      document.getElementById('result-message').innerHTML = 
+        `<div class="incorrect-message">❌ Incorrect! The correct answer was: ${question.options[question.correct]}</div>`;
+    }
+    
+    updateStats();
+    document.getElementById('next-btn').textContent = 
+      currentQuestionIndex === questions.length - 1 ? 'Finish Quiz' : 'Next Question';
+  }
+
+  function nextQuestion() {
+    if (!questionAnswered) {
+      submitAnswer();
+      setTimeout(() => {
+        currentQuestionIndex++;
+        showQuestion();
+      }, 2000);
+    } else {
+      currentQuestionIndex++;
+      showQuestion();
+    }
+  }
+
+  function startTimer() {
+    document.getElementById('time-remaining').textContent = timeLeft;
+    document.getElementById('timer').classList.remove('warning');
+    
+    timer = setInterval(() => {
+      timeLeft--;
+      document.getElementById('time-remaining').textContent = timeLeft;
+      
+      if (timeLeft <= 10) {
+        document.getElementById('timer').classList.add('warning');
+      }
+      
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        if (!questionAnswered) {
+          submitAnswer();
+          setTimeout(() => {
+            currentQuestionIndex++;
+            showQuestion();
+          }, 2000);
+        }
+      }
+    }, 1000);
+  }
+
+  function updateStats() {
+    document.getElementById('current-question').textContent = Math.min(currentQuestionIndex + 1, questions.length);
+    document.getElementById('score-display').textContent = score;
+    document.getElementById('correct-count').textContent = correctAnswers;
+    const percentage = currentQuestionIndex > 0 ? Math.round((correctAnswers / Math.max(currentQuestionIndex, 1)) * 100) : 0;
+    document.getElementById('percentage').textContent = percentage + '%';
+  }
+
+  function updateProgress() {
+    const progress = ((currentQuestionIndex) / questions.length) * 100;
+    const progressFill = document.getElementById('progress-fill');
+    progressFill.style.width = progress + '%';
+    progressFill.textContent = `${currentQuestionIndex}/${questions.length}`;
+  }
+
+  function endQuiz() {
+    clearInterval(timer);
+    
+    document.querySelector('.question-area').style.display = 'none';
+    document.getElementById('timer').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'none';
+    document.getElementById('result-message').style.display = 'none';
+    
+    document.getElementById('quiz-complete').style.display = 'block';
+    
+    const finalPercentage = Math.round((correctAnswers / questions.length) * 100);
+    document.getElementById('final-score').textContent = `${correctAnswers}/${questions.length}`;
+    document.getElementById('final-percentage').textContent = finalPercentage + '%';
+    
+    if (finalPercentage >= 35) {
+      document.getElementById('reward-section').style.display = 'block';
+    }
+
+    const progressFill = document.getElementById('progress-fill');
+    progressFill.style.width = '100%';
+    progressFill.textContent = `${questions.length}/${questions.length} - Complete!`;
+  }
+
+  function claimReward(rewardType) {
+    alert(`🎉 Congratulations!\n\nYou've successfully claimed: ${rewardType}\n\nYour reward will be processed within 24 hours. Thank you for participating in our Daily Quiz Challenge!`);
+    document.getElementById('reward-section').style.display = 'none';
+  }
+
+  function resetQuiz() {
+    currentQuestionIndex = 0;
+    score = 0;
+    correctAnswers = 0;
+    selectedAnswer = null;
+    questionAnswered = false;
+    timeLeft = 30;
+    clearInterval(timer);
+    
+    document.querySelector('.question-area').style.display = 'block';
+    document.getElementById('timer').style.display = 'block';
+    document.getElementById('next-btn').style.display = 'inline-block';
+    document.getElementById('result-message').style.display = 'block';
+    document.getElementById('quiz-complete').style.display = 'none';
+    
+    const progressFill = document.getElementById('progress-fill');
+    progressFill.style.width = '0%';
+    progressFill.textContent = '0/50';
+    
+    shuffleQuestions();
+    startQuiz();
+  }
+
+  // Button event listeners
+  document.getElementById('next-btn').addEventListener('click', nextQuestion);
+  document.getElementById('restart-btn').addEventListener('click', resetQuiz);
+
+  document.addEventListener('DOMContentLoaded', function() {
+    startQuiz();
+  });
+  </script>
 </body>
 </html>
