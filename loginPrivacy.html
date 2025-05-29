@@ -37,9 +37,9 @@
 
   <!-- Consent Agreement Section -->
   <div style="margin-top: 30px;">
-    <input type="checkbox" id="agreeCheckbox" onchange="toggleContinueButton()" />
+    <input type="checkbox" id="agreeCheckbox" onchange="toggleContinueButton()" checked />
     <label for="agreeCheckbox">I have read and agree to the Privacy Policy.</label><br><br>
-    <button id="continueBtn" onclick="window.location.href='signup.html'" disabled>Continue</button>
+    <button id="continueBtn" onclick="window.location.href='home.html'" disabled>Continue</button>
   </div>
 
   <!-- Footer -->
@@ -52,7 +52,7 @@
       <div class="ii">
         <p><strong>company</strong></p><br>
         <p><a href="blog.html">Blog</a></p>
-        <p><a href="privacy.html">Privacy and Policy</a></p>
+        <p><a href="loginPrivacy.html">Privacy and Policy</a></p>
         <p>FAQ'S</p><br>
         <p><a href="contact.html">Contact Us</a></p>
       </div>
@@ -84,11 +84,17 @@
   </footer>
 
   <script>
-    function toggleContinueButton() {
-      const checkbox = document.getElementById("agreeCheckbox");
-      const button = document.getElementById("continueBtn");
-      button.disabled = !checkbox.checked;
-    }
+   function toggleContinueButton() {
+  const checkbox = document.getElementById("agreeCheckbox");
+  const button = document.getElementById("continueBtn");
+  button.disabled = !checkbox.checked;
+}
+
+// Enable the button on page load if checkbox is already checked
+window.onload = function () {
+  toggleContinueButton();
+};
+
   </script>
 
 </body>
