@@ -4,7 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Welcome Page</title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8630603554537037"
+     crossorigin="anonymous"></script>
   <link rel="stylesheet" href="home.css" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#008080" />
 </head>
 <body>
   <div class="container">
@@ -16,5 +20,15 @@
     <p class="extra">Create Account Spin & Scratch</p>
     <button class="signup-btn"><a href="privacy.html">Signup</a></button>
   </div>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+    navigator.serviceWorker
+    .register("/service-worker.js")
+    .then(() => console.log("✅ Service Worker Registered"))
+    .catch((err) => console.error("❌ SW Registration Failed:", err));
+  }
+
+  </script>
 </body>
 </html>
